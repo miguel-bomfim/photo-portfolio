@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import LazyImage from "@/components/LazyImage";
 
 interface PortfolioItem {
@@ -57,16 +54,10 @@ const portfolioItems: PortfolioItem[] = [
 ];
 
 export default function PortfolioGrid() {
-  const [items, setItems] = useState<PortfolioItem[]>([]);
-
-  useEffect(() => {
-    setItems(portfolioItems);
-  }, []);
-
   return (
     <div className="container mx-auto px-4 py-24">
       <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-        {items.map((item) => (
+        {portfolioItems.map((item) => (
           <div
             key={item.id}
             className="relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 ease-in-out hover:shadow-xl break-inside-avoid"
