@@ -6,7 +6,7 @@ import { fetchHome } from "../services/hygraphApi";
 
 export default async function Home() {
   const home = await fetchHome();
-  console.log("home", home);
+
   return (
     <main>
       <HomeBanner homeBackground={home.homePage.homeBackground.url} />
