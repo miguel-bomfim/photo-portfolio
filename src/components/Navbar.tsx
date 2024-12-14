@@ -52,7 +52,7 @@ export default function Navbar() {
             href="/"
             className={`hover:text-gray-600 ${
               shouldBeTransparent ? "text-white" : "text-black"
-            }`}
+            } ${pathname === "/" && "font-bold"}`}
           >
             Home
           </Link>
@@ -60,7 +60,7 @@ export default function Navbar() {
             href="/portfolio"
             className={`hover:text-gray-600 ${
               shouldBeTransparent ? "text-white" : "text-black"
-            }`}
+            } ${pathname === "/portfolio" && "font-bold"}`}
           >
             Portfolio
           </Link>
@@ -68,7 +68,7 @@ export default function Navbar() {
             href="/contato"
             className={`hover:text-gray-600 ${
               shouldBeTransparent ? "text-white" : "text-black"
-            }`}
+            } ${pathname === "/contato" && "font-bold"}`}
           >
             Contato
           </Link>
