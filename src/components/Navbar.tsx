@@ -14,12 +14,10 @@ export default function Navbar() {
       setIsScrolled(window.scrollY > 50);
     };
 
-    // Set initial scroll position
     handleScroll();
 
     window.addEventListener("scroll", handleScroll);
 
-    // Reset isPageLoad after a short delay
     const timer = setTimeout(() => {
       setIsPageLoad(false);
     }, 100);
