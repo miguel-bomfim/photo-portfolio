@@ -17,7 +17,7 @@ export default function HomeBanner({
       />
       <div className="absolute inset-0 bg-black/30" /> {/* Optional overlay */}
       <div className="relative h-full flex items-center justify-center">
-        <h1 className="text-6xl md:text-8xl font-bold text-white text-center tracking-wider">
+        <h1 className="text-6xl md:text-9xl text-white text-center tracking-wider font-mono font-bold">
           Sarah Heloísa
         </h1>
       </div>

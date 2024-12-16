@@ -32,14 +32,14 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
+      className={`fixed  top-0 left-0 right-0 z-50 transition-colors duration-300 text-black ${
         shouldBeTransparent ? "bg-transparent" : "bg-white shadow-sm"
       }`}
     >
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link
           href="/"
-          className={`text-xl font-bold ${
+          className={`text-2xl font-bold font-mono ${
             shouldBeTransparent ? "opacity-0" : "opacity-100"
           }`}
         >
@@ -48,7 +48,7 @@ export default function Navbar() {
         <div className="space-x-6">
           <Link
             href="/"
-            className={`hover:text-gray-600 ${
+            className={`hover:text-gray-600 font-sans ${
               shouldBeTransparent ? "text-white" : "text-black"
             } ${pathname === "/" && "font-bold"}`}
           >
@@ -56,7 +56,7 @@ export default function Navbar() {
           </Link>
           <Link
             href="/portfolio"
-            className={`hover:text-gray-600 ${
+            className={`hover:text-gray-600 font-sans ${
               shouldBeTransparent ? "text-white" : "text-black"
             } ${pathname === "/portfolio" && "font-bold"}`}
           >
@@ -64,7 +64,7 @@ export default function Navbar() {
           </Link>
           <Link
             href="/contato"
-            className={`hover:text-gray-600 ${
+            className={`hover:text-gray-600 font-sans ${
               shouldBeTransparent ? "text-white" : "text-black"
             } ${pathname === "/contato" && "font-bold"}`}
           >
