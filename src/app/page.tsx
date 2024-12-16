@@ -6,11 +6,10 @@ import { fetchHome } from "../services/hygraphApi";
 
 export default async function Home() {
   const home = await fetchHome();
-
   return (
     <main>
-      <HomeBanner homeBackground={home?.homePage.homeBackground.url} />
-      <HomeGridPortfolio />
+      <HomeBanner homeBackground={home.homePage.homeBackground.url} />
+      <HomeGridPortfolio portfolio={home.homePage.homePhotos} />
       <div className="text-center my-8">
         <Link
           href="/portfolio"

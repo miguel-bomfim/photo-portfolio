@@ -1,14 +1,16 @@
 import LazyImage from "@/components/LazyImage";
 
-interface PortfolioItem {
-  id: number;
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
+interface PortfolioGrid {
+  portfolio: [
+    {
+      url: string;
+      width: number;
+      height: number;
+    }
+  ];
 }
 
-const portfolioItems: PortfolioItem[] = [
+const portfolioItems = [
   {
     id: 1,
     src: "https://images.unsplash.com/photo-1731323036230-fb37b4d9ed71?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -53,25 +55,22 @@ const portfolioItems: PortfolioItem[] = [
   },
 ];
 
-export default function PortfolioGrid() {
+export default function PortfolioGrid({ portfolio }: PortfolioGrid) {
   return (
     <div className="container mx-auto px-4 py-24">
       <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-        {portfolioItems.map((item) => (
+        {portfolio.map((item, idx) => (
           <div
-            key={item.id}
+            key={idx}
             className="relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 ease-in-out hover:shadow-xl break-inside-avoid"
           >
             <LazyImage
-              src={item.src}
-              alt={item.alt}
+              src={item.url}
+              alt=""
               width={item.width}
               height={item.height}
             />
             <div className="absolute inset-0 bg-black bg-opacity-0 transition-opacity duration-300 ease-in-out hover:bg-opacity-20" />
-            <div className="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 transition-opacity duration-300 ease-in-out hover:opacity-100">
-              <h3 className="text-lg font-semibold">{item.alt}</h3>
-            </div>
           </div>
         ))}
       </div>
