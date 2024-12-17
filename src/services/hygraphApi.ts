@@ -13,6 +13,7 @@ export const fetchHome = async () => {
             width
             height
           }
+          bannerText
           homeBackground {
             url
           }

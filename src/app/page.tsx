@@ -9,6 +9,9 @@ export default async function Home() {
   return (
     <main>
       <HomeBanner homeBackground={home.homePage.homeBackground.url} />
+      <h2 className="p-4 my-6 text-center font-mono text-xl">
+        {home.homePage.bannerText}
+      </h2>
       <HomeGridPortfolio portfolio={home.homePage.homePhotos} />
       <div className="text-center my-8">
         <Link

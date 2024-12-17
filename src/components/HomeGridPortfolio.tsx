@@ -12,7 +12,7 @@ interface PortfolioGrid {
 
 export default function PortfolioGrid({ portfolio }: PortfolioGrid) {
   return (
-    <div className="container mx-auto px-4 py-24">
+    <div className="container mx-auto px-4">
       <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
         {portfolio.map((item, idx) => (
           <div
