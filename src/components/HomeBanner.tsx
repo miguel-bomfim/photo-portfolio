@@ -10,7 +10,7 @@ export default function HomeBanner({
   return (
     <div className="relative h-screen w-full overflow-hidden">
       <Image
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 w-full h-full object-cover	"
         src={bannerGif}
         alt=""
         loading="lazy"
