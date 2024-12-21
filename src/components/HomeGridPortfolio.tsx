@@ -19,8 +19,9 @@ export default function PortfolioGrid({ portfolio, mobile }: PortfolioGrid) {
   const [portfolioImages, setPortfolioImages] = useState(portfolio);
 
   useEffect(() => {
-    !mobile &&
+    if (!mobile) {
       setTimeout(() => setPortfolioImages(shuffle(portfolioImages)), 4000);
+    }
   }, [portfolioImages]);
 
   return (
