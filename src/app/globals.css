@@ -23,3 +23,15 @@ body {
 a[data-active="true"] {
   font-weight: 600;
 }
+
+.fade-image.fade-out {
+  opacity: 0;
+}
+
+.fade-image.fade-in {
+  opacity: 1;
+}
+
+.fade-image {
+  transition: opacity 0.5s ease-in-out;
+}
