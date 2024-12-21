@@ -20,14 +20,14 @@ export default function PortfolioGrid({ portfolio, mobile }: PortfolioGrid) {
 
   useEffect(() => {
     if (!mobile) {
-      setTimeout(() => setPortfolioImages(shuffle(portfolioImages)), 4000);
+      setTimeout(() => setPortfolioImages(shuffle(portfolioImages)), 7000);
     }
   }, [portfolioImages]);
 
   return (
     <div className="container mx-auto px-4">
-      <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-        {portfolioImages.slice(0, 6).map((item, idx) => (
+      <div className="columns-1 sm:columns-3 lg:columns-4 gap-4 space-y-4">
+        {portfolioImages.slice(0, 8).map((item, idx) => (
           <div
             key={idx}
             className="relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 ease-in-out break-inside-avoid"
