@@ -1,9 +1,9 @@
 import HomeBanner from "@/components/HomeBanner";
-import HomeGridPortfolio from "@/components/HomeGridPortfolio";
+import PortfolioGrid from "@/components/PortfolioGrid";
 import Link from "next/link";
 import { headers } from "next/headers";
 import { FiArrowRight } from "react-icons/fi";
-import { fetchHome } from "../services/hygraphApi";
+import { fetchHome } from "@/services/hygraphApi";
 import { isMobile } from "@/utils/isMobile";
 
 export default async function Home() {
@@ -17,7 +17,7 @@ export default async function Home() {
       <h2 className="p-4 my-6 text-center font-mono text-xl">
         {home.homePage.bannerText}
       </h2>
-      <HomeGridPortfolio
+      <PortfolioGrid
         mobile={mobileCheck}
         portfolio={home.homePage.homePhotos}
       />

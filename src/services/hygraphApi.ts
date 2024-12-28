@@ -6,7 +6,7 @@ export const fetchHome = async () => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      query: `query MyQuery {
+      query: `query Home {
         homePage(where: {id: "clmtyvdhc5a850blt4aubhmt6"}) {
           homePhotos {
             url
@@ -23,4 +23,29 @@ export const fetchHome = async () => {
   });
   const postsData = await response.json();
   return postsData.data;
+};
+
+export const fetchPortfolio = async () => {
+  const HYGRAPH_ENDPOINT = process.env.HYGRAPH_API || "";
+  const response = await fetch(HYGRAPH_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query: `query Portfolio {
+        portfolios {
+          slug
+          title
+          thumbnail {
+            width
+            url
+            height
+          }
+        }
+      }`,
+    }),
+  });
+  const postsData = await response.json();
+  return postsData.data.portfolios;
 };
