@@ -52,6 +52,12 @@ export default function PortfolioGrid({ portfolio, mobile }: PortfolioGrid) {
               key={idx}
               className="relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 ease-in-out break-inside-avoid"
             >
+              {portfolioPage && (
+                <span className="[text-shadow:_1px_1px_10px_black] absolute z-10 bottom-0 bg-black w-full text-center p-2 text-white">
+                  Teste
+                </span>
+              )}
+
               <LazyImage
                 src={item.url}
                 alt=""
@@ -61,7 +67,6 @@ export default function PortfolioGrid({ portfolio, mobile }: PortfolioGrid) {
                   isFading ? "fade-out" : "fade-in"
                 }`}
               />
-
               <div className="absolute inset-0 bg-black bg-opacity-0 transition-opacity duration-300 ease-in-out" />
             </div>
           ))}
