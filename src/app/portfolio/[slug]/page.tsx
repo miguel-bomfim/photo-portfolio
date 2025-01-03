@@ -12,8 +12,9 @@ export default async function Page({
 
   return (
     <main className="mt-12">
-      {portfolio.map((item: PortfolioThumbnailType) => (
+      {portfolio.map((item: PortfolioThumbnailType, idx: number) => (
         <LazyImage
+          key={idx}
           width={item.width}
           height={item.height}
           alt=""
