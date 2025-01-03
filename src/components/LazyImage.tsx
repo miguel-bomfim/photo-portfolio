@@ -3,14 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { BiLoaderAlt } from "react-icons/bi";
-
-interface LazyImageProps {
-  src: string;
-  alt: string;
-  height: number;
-  width: number;
-  className?: string;
-}
+import { LazyImageType } from "@/types";
 
 export default function LazyImage({
   src,
@@ -18,7 +11,7 @@ export default function LazyImage({
   height,
   width,
   className = "",
-}: LazyImageProps) {
+}: LazyImageType) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const imgRef = useRef<HTMLDivElement>(null);
@@ -54,7 +47,7 @@ export default function LazyImage({
   return (
     <div
       ref={imgRef}
-      className={`relative w-full overflow-hidden bg-gray-200 rounded-lg ${className}`}
+      className={`min-h-52 relative w-full overflow-hidden bg-gray-200 rounded-lg ${className}`}
       style={{ paddingBottom: `${(height / width) * 100}%` }}
     >
       {isInView && (

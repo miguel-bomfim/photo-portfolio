@@ -54,7 +54,7 @@ export default function Navbar() {
   }) => (
     <Link
       href={href}
-      className={`hover:text-gray-600 transition-colors ${
+      className={`font-sans hover:text-gray-600 transition-colors ${
         shouldBeTransparent && !mobile ? "text-white" : "text-black"
       }
         ${mobile && "text-lg"}`}

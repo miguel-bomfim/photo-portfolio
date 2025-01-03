@@ -8,7 +8,7 @@ export const fetchHome = async () => {
     body: JSON.stringify({
       query: `query Home {
         homePage(where: {id: "clmtyvdhc5a850blt4aubhmt6"}) {
-          homePhotos {
+          portfolioThumbnail {
             url
             width
             height
@@ -37,7 +37,7 @@ export const fetchPortfolio = async () => {
         portfolios {
           slug
           title
-          thumbnail {
+          portfolioThumbnail {
             width
             url
             height
