@@ -16,6 +16,7 @@ export default function HomeBanner({
         loading="lazy"
         width={800}
         height={800}
+        unoptimized
       />
       <div className="absolute inset-0 bg-black/30" /> {/* Optional overlay */}
       <div className="relative h-full flex items-center justify-center">
