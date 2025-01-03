@@ -67,7 +67,10 @@ export default function LazyImage({
               isLoaded ? "opacity-0" : "opacity-100"
             }`}
           >
-            <BiLoaderAlt className="w-8 h-8 text-gray-400 animate-spin" />
+            <BiLoaderAlt
+              color="white"
+              className="w-8 h-8 text-gray-400 animate-spin"
+            />
           </div>
         </>
       )}

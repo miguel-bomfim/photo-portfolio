@@ -48,7 +48,7 @@ export default function PortfolioGrid({
               className="relative overflow-hidden rounded-lg flex items-center shadow-lg transition-all duration-300 ease-in-out break-inside-avoid"
             >
               {portfolioPage && (
-                <span className="font-mono hover:[text-shadow:_1px_1px_10px_white] [text-shadow:_1px_1px_10px_black] content-center absolute z-10 w-full h-full bg-black/20 transition duration-300 hover:bg-transparent text-center p-2 text-white">
+                <span className="font-mono hover:[text-shadow:_1px_1px_10px_white] [text-shadow:_1px_1px_10px_black] content-center absolute z-10 w-full h-full bg-black/20 transition-all duration-300 hover:bg-transparent text-center p-2 text-white">
                   {item.title}
                 </span>
               )}
