@@ -1,6 +1,5 @@
 import { fetchSinglePortfolio } from "@/services/hygraphApi";
 import { PortfolioThumbnailType } from "@/types";
-import LazyImage from "@/components/LazyImage";
 import PortfolioImages from "@/components/PortolioImages";
 
 export default async function Page({
