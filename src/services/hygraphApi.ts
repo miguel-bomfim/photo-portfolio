@@ -61,6 +61,7 @@ export const fetchSinglePortfolio = async (slug: string) => {
       query: `query SinglePortfolio($slug: String!) {
         portfolio(where: {slug: $slug}) {
           photos {
+            id
             url
             width
             height

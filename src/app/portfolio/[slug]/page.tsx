@@ -1,6 +1,7 @@
 import { fetchSinglePortfolio } from "@/services/hygraphApi";
 import { PortfolioThumbnailType } from "@/types";
 import LazyImage from "@/components/LazyImage";
+import PortfolioImages from "@/components/PortolioImages";
 
 export default async function Page({
   params,
@@ -8,19 +9,11 @@ export default async function Page({
   params: Promise<{ slug: string }>;
 }) {
   const slug = (await params).slug;
-  const portfolio = await fetchSinglePortfolio(slug);
+  const portfolio: PortfolioThumbnailType[] = await fetchSinglePortfolio(slug);
 
   return (
-    <main className="mt-12">
-      {portfolio.map((item: PortfolioThumbnailType, idx: number) => (
-        <LazyImage
-          key={idx}
-          width={item.width}
-          height={item.height}
-          alt=""
-          src={item.url}
-        />
-      ))}
+    <main>
+      <PortfolioImages images={portfolio} />
     </main>
   );
 }
