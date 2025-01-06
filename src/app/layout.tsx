@@ -1,23 +1,24 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import localFont from 'next/font/local'
+import localFont from "next/font/local";
 
 const robotoFont = localFont({
-  src: '../fonts/Roboto.ttf',
-  display: 'swap',
-  variable: '--font-roboto',
-})
+  src: "../fonts/Roboto.ttf",
+  display: "swap",
+  variable: "--font-roboto",
+});
 
 const poppinsFont = localFont({
-  src: '../fonts/Poppins-Medium.ttf',
-  display: 'swap',
-  variable: '--font-poppins',
-})
+  src: "../fonts/Poppins-Medium.ttf",
+  display: "swap",
+  variable: "--font-poppins",
+});
 
 export const metadata: Metadata = {
   title: "S α ɾ α ԋ",
-  description: "Portfólio de fotografia",
+  description:
+    "Aqui você encontra experiências memoráveis eternizadas em fotos",
 };
 
 export default function RootLayout({
@@ -28,7 +29,10 @@ export default function RootLayout({
   const currentYear = new Date().getFullYear();
 
   return (
-    <html lang="en" className={`${robotoFont.variable} ${poppinsFont.variable}`}>
+    <html
+      lang="en"
+      className={`${robotoFont.variable} ${poppinsFont.variable}`}
+    >
       <body>
         <Navbar />
         {children}
