@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { FiArrowLeft, FiArrowRight, FiX } from "react-icons/fi";
 import { PortfolioThumbnailType } from "@/types";
@@ -18,6 +18,10 @@ export default function FullscreenCarousel({
 }: FullscreenCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [scale, setScale] = useState(1);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [currentScale, setCurrentScale] = useState(1);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   const handlePrevious = useCallback(() => {
     setCurrentIndex((prevIndex) => {
@@ -62,8 +66,49 @@ export default function FullscreenCarousel({
     };
   }, [handlePrevious, handleNext, onClose]);
 
+  const handleDragStart = useCallback(
+    (clientX: number) => {
+      if (currentScale === 1) {
+        setIsDragging(true);
+        setStartX(clientX);
+      }
+    },
+    [currentScale]
+  );
+
+  const handleDragMove = useCallback(
+    (clientX: number) => {
+      if (!isDragging || currentScale !== 1) return;
+
+      const deltaX = clientX - startX;
+      if (Math.abs(deltaX) > 100) {
+        if (deltaX > 0) {
+          handlePrevious();
+        } else {
+          handleNext();
+        }
+        setIsDragging(false);
+      }
+    },
+    [isDragging, startX, handlePrevious, handleNext, currentScale]
+  );
+
+  const handleDragEnd = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center">
+    <div
+      ref={carouselRef}
+      className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center"
+      onTouchStart={(e) => handleDragStart(e.touches[0].clientX)}
+      onTouchMove={(e) => handleDragMove(e.touches[0].clientX)}
+      onTouchEnd={handleDragEnd}
+      onMouseDown={(e) => handleDragStart(e.clientX)}
+      onMouseMove={(e) => handleDragMove(e.clientX)}
+      onMouseUp={handleDragEnd}
+      onMouseLeave={handleDragEnd}
+    >
       <button
         className="absolute z-10 top-4 right-4 text-white hover:text-gray-300"
         onClick={onClose}
