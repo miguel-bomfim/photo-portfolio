@@ -20,7 +20,7 @@ export default function FullscreenCarousel({
   const [scale, setScale] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
-  const [currentScale, setCurrentScale] = useState(1);
+  const currentScale = 1;
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const handlePrevious = useCallback(() => {
