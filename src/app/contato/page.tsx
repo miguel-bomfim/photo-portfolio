@@ -7,13 +7,13 @@ export default function Contato() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-10 px-4 mt-10">
       <div className="max-w-4xl w-full flex flex-col items-center">
-        <h1 className="text-4xl font-bold text-center mb-4">
+        <h1 className="text-4xl text-black font-bold text-center mb-4">
           Entre em contato
         </h1>
 
-        <p className="text-center mb-8 max-w-96">
+        <p className="text-center mb-8 max-w-96 text-black">
           Eu adoraria ouvir de você! Sinta-se à vontade para entrar em contato
-          através do do E-mail abaixo ou pelo Instagram.
+          através do E-mail abaixo ou pelo Instagram.
         </p>
 
         <div className="flex flex-col items-center mb-8">
@@ -23,8 +23,8 @@ export default function Contato() {
             rel="noopener noreferrer"
             className="flex items-center space-x-2  hover:text-gray-900 transition"
           >
-            <IoMdMail size={24} />
-            <span className="md:text-lg font-medium underline">
+            <IoMdMail size={24} color="black" />
+            <span className="md:text-lg text-black font-medium underline">
               sarahheloisa2010@gmail.com
             </span>
           </a>
@@ -34,8 +34,8 @@ export default function Contato() {
             rel="noopener noreferrer"
             className="flex items-center space-x-2  hover:text-gray-900 transition"
           >
-            <RiInstagramFill size={24} />
-            <span className="md:text-lg font-medium underline">
+            <RiInstagramFill size={24} color="black" />
+            <span className="md:text-lg text-black font-medium underline">
               @sarahheloisa
             </span>
           </a>
