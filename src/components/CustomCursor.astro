@@ -1,0 +1,135 @@
+<div class="site-cursor" data-site-cursor aria-hidden="true">
+  <span class="site-cursor-dot"></span>
+</div>
+
+<script>
+  const cursor = document.querySelector<HTMLElement>("[data-site-cursor]");
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (cursor && finePointer.matches) {
+    document.documentElement.classList.add("has-custom-cursor");
+
+    let targetX = -100;
+    let targetY = -100;
+    let currentX = targetX;
+    let currentY = targetY;
+
+    const render = () => {
+      const ease = reducedMotion.matches ? 1 : 0.22;
+      currentX += (targetX - currentX) * ease;
+      currentY += (targetY - currentY) * ease;
+      cursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+      requestAnimationFrame(render);
+    };
+
+    document.addEventListener("pointermove", (event) => {
+      targetX = event.clientX;
+      targetY = event.clientY;
+      cursor.classList.add("is-visible");
+
+      const target = event.target instanceof Element ? event.target : null;
+      const overPhoto = Boolean(
+        target?.closest(".photo, .work-cover, .lightbox-inner"),
+      );
+      const overInteractive = Boolean(target?.closest("a, button"));
+
+      cursor.classList.toggle("is-over-photo", overPhoto);
+      cursor.classList.toggle(
+        "is-over-interactive",
+        overInteractive && !overPhoto,
+      );
+    });
+
+    document.addEventListener("pointerdown", () =>
+      cursor.classList.add("is-pressed"),
+    );
+    document.addEventListener("pointerup", () =>
+      cursor.classList.remove("is-pressed"),
+    );
+    document.documentElement.addEventListener("mouseleave", () =>
+      cursor.classList.remove("is-visible"),
+    );
+    window.addEventListener("blur", () =>
+      cursor.classList.remove("is-visible"),
+    );
+
+    render();
+  }
+</script>
+
+<style>
+  .site-cursor {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    display: none;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 180ms ease;
+    will-change: transform;
+  }
+
+  .site-cursor-dot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    background: transparent;
+    transform: translate(-50%, -50%);
+    transition:
+      width 280ms cubic-bezier(0.2, 0.75, 0.25, 1),
+      height 280ms cubic-bezier(0.2, 0.75, 0.25, 1),
+      border-color 180ms ease,
+      background-color 180ms ease,
+      transform 140ms ease;
+  }
+
+  .site-cursor.is-visible {
+    opacity: 1;
+  }
+
+  .site-cursor.is-over-interactive .site-cursor-dot {
+    width: 22px;
+    height: 22px;
+  }
+
+  .site-cursor.is-over-photo {
+    mix-blend-mode: difference;
+  }
+
+  .site-cursor.is-over-photo .site-cursor-dot {
+    width: 42px;
+    height: 42px;
+    border-color: #fff;
+    background: #fff;
+  }
+
+  .site-cursor.is-pressed .site-cursor-dot {
+    transform: translate(-50%, -50%) scale(0.82);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .site-cursor {
+      display: block;
+    }
+
+    :global(html.has-custom-cursor),
+    :global(html.has-custom-cursor *) {
+      cursor: none !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-cursor,
+    .site-cursor-dot {
+      transition-duration: 0.01ms;
+    }
+  }
+</style>
