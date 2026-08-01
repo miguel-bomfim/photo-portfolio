@@ -1,0 +1,206 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  active?: "home" | "works" | "about";
+}
+
+const { title, description, active = "home" } = Astro.props;
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f7f6f1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+    <script is:inline>
+      const savedTheme = localStorage.getItem("sarah-theme");
+      const theme = savedTheme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.dataset.theme = theme;
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Sarah, página inicial">
+        Sarah
+        <small>Fotógrafa · Brasil</small>
+      </a>
+
+      <a class="mark-link" href="/" aria-label="Ir para a página inicial">
+        <img class="mark" src="/mark.svg" alt="" aria-hidden="true" />
+      </a>
+
+      <nav class="nav" aria-label="Navegação principal">
+        <a class:list={{ "desktop-link": true, "is-active": active === "home" }} href="/">Início</a>
+        <a class:list={{ "is-active": active === "works" }} href="/trabalhos">Trabalhos</a>
+        <a class="desktop-link" href="/#sobre">Sobre</a>
+        <a href="/#contato">Contato</a>
+        <button class="theme-toggle" type="button" aria-label="Alternar tema">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M20 15.2A8.4 8.4 0 0 1 8.8 4 8.5 8.5 0 1 0 20 15.2Z" fill="currentColor"/>
+          </svg>
+        </button>
+      </nav>
+    </header>
+
+    <slot />
+
+    <script is:inline>
+      const setThemeColor = () => {
+        const color = getComputedStyle(document.documentElement).getPropertyValue("--paper").trim();
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", color);
+      };
+      setThemeColor();
+
+      document.querySelector(".theme-toggle")?.addEventListener("click", () => {
+        const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        localStorage.setItem("sarah-theme", next);
+        setThemeColor();
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  .site-header {
+    position: sticky;
+    z-index: 20;
+    top: 0;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    min-height: 112px;
+    padding: 18px clamp(18px, 2.5vw, 44px);
+    background: var(--panel);
+    border-bottom: 1px solid transparent;
+    backdrop-filter: blur(14px);
+  }
+
+  .brand {
+    font-size: clamp(17px, 1.4vw, 23px);
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: -.04em;
+  }
+
+  .brand small {
+    display: block;
+    margin-top: 3px;
+    color: var(--muted);
+    font: 300 9px/1 "DM Mono", monospace;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+  }
+
+  .mark-link {
+    display: block;
+    line-height: 0;
+  }
+
+  .mark {
+    width: 50px;
+    color: var(--accent);
+    transition: transform 450ms cubic-bezier(.2, .75, .25, 1);
+  }
+
+  .mark:hover {
+    transform: rotate(180deg);
+  }
+
+  .nav {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: clamp(13px, 1.7vw, 29px);
+  }
+
+  .nav button,
+  .nav a {
+    position: relative;
+    padding: 4px 0;
+    border: 0;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    font: 500 clamp(11px, .85vw, 14px)/1 "DM Mono", monospace;
+    letter-spacing: -.03em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .nav button::after,
+  .nav a::after {
+    position: absolute;
+    right: 0;
+    bottom: -4px;
+    left: 0;
+    height: 1px;
+    background: currentColor;
+    content: "";
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 250ms ease;
+  }
+
+  .nav button:hover::after,
+  .nav a:hover::after,
+  .nav a.is-active::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .nav .is-active {
+    color: var(--ink);
+  }
+
+  .theme-toggle {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    place-items: center;
+    border: 1px solid var(--line) !important;
+    border-radius: 50%;
+  }
+
+  .theme-toggle::after {
+    display: none;
+  }
+
+  .theme-toggle svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  @media (max-width: 760px) {
+    .site-header {
+      min-height: 78px;
+      grid-template-columns: 1fr auto;
+      padding: 12px 16px;
+    }
+
+    .mark-link {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .mark-link .mark {
+      width: 38px;
+    }
+
+    .brand small,
+    .nav .desktop-link {
+      display: none;
+    }
+
+    .nav {
+      gap: 6px;
+    }
+  }
+</style>

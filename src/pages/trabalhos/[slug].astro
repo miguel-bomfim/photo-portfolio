@@ -1,0 +1,177 @@
+---
+import PhotoGallery, { type DisplayPhoto } from "../../components/PhotoGallery.astro";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { getSiteData, type Portfolio } from "../../lib/hygraph";
+
+export async function getStaticPaths() {
+  const content = await getSiteData();
+  return content.portfolios.map((portfolio, index) => ({
+    params: { slug: portfolio.slug },
+    props: {
+      portfolio,
+      previousPortfolio:
+        content.portfolios[(index - 1 + content.portfolios.length) % content.portfolios.length],
+      nextPortfolio: content.portfolios[(index + 1) % content.portfolios.length],
+    },
+  }));
+}
+
+interface Props {
+  portfolio: Portfolio;
+  previousPortfolio: Portfolio;
+  nextPortfolio: Portfolio;
+}
+
+const { portfolio, previousPortfolio, nextPortfolio } = Astro.props;
+const photos: DisplayPhoto[] = portfolio.photos.map((asset, index) => ({
+  id: asset.id || `${portfolio.slug}-${index}`,
+  title: portfolio.title,
+  label: String(index + 1).padStart(2, "0"),
+  ratio:
+    asset.width && asset.height
+      ? `${asset.width} / ${asset.height}`
+      : index % 3 === 0
+        ? "4 / 5"
+        : "3 / 2",
+  src: asset.url,
+  width: asset.width || 1200,
+  height: asset.height || 1500,
+}));
+---
+<SiteLayout
+  title={`${portfolio.title} — Sarah Heloísa`}
+  description={portfolio.summary || `Ensaio fotográfico ${portfolio.title}, por Sarah Heloísa.`}
+  active="works"
+>
+  <main>
+    <section class="project-head" aria-labelledby="project-title">
+      <div>
+        <a class="back-link" href="/trabalhos">← Todos os trabalhos</a>
+        <h1 id="project-title">{portfolio.title}</h1>
+      </div>
+      <div class="project-description">
+        <p class="eyebrow">{photos.length} fotografias</p>
+        <p>{portfolio.summary || "Uma história contada em luz, presença e pequenos gestos."}</p>
+      </div>
+    </section>
+
+    <PhotoGallery photos={photos} id={portfolio.slug} eagerCount={6} />
+
+    {previousPortfolio && nextPortfolio && (
+      <nav class="project-navigation" aria-label="Navegação entre trabalhos">
+        <a class="project-link project-link--previous" href={`/trabalhos/${previousPortfolio.slug}`}>
+          <span class="eyebrow">← Álbum anterior</span>
+          <strong>{previousPortfolio.title}</strong>
+        </a>
+        <a class="project-link project-link--next" href={`/trabalhos/${nextPortfolio.slug}`}>
+          <span class="eyebrow">Próximo álbum →</span>
+          <strong>{nextPortfolio.title}</strong>
+        </a>
+      </nav>
+    )}
+  </main>
+</SiteLayout>
+
+<style>
+  .project-head {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 40px;
+    align-items: end;
+    min-height: 54vh;
+    padding: clamp(55px, 9vw, 140px) clamp(18px, 3.5vw, 64px)
+      clamp(50px, 7vw, 100px);
+  }
+
+  .project-head h1 {
+    margin: 0;
+    font-size: clamp(58px, 10vw, 155px);
+    font-weight: 500;
+    line-height: 0.84;
+    letter-spacing: -0.08em;
+  }
+
+  .project-description {
+    max-width: 540px;
+    justify-self: end;
+  }
+
+  .project-description p:last-child {
+    margin: 0;
+    white-space: pre-line;
+    font-size: clamp(14px, 1.15vw, 17px);
+    line-height: 1.6;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 24px;
+    color: var(--muted);
+    font: 400 10px/1 "DM Mono", monospace;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .project-navigation {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid var(--line);
+  }
+
+  .project-link {
+    display: flex;
+    min-width: 0;
+    padding: clamp(64px, 9vw, 132px) clamp(20px, 5vw, 90px);
+    flex-direction: column;
+    gap: 22px;
+    text-decoration: none;
+  }
+
+  .project-link--next {
+    align-items: flex-end;
+    border-left: 1px solid var(--line);
+    text-align: right;
+  }
+
+  .project-link .eyebrow {
+    margin: 0;
+  }
+
+  .project-link strong {
+    font-size: clamp(32px, 6vw, 94px);
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.065em;
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 760px) {
+    .project-head {
+      display: block;
+      min-height: auto;
+      padding-top: 70px;
+    }
+
+    .project-head h1 {
+      margin-bottom: 55px;
+    }
+
+    .project-description {
+      width: 78%;
+      margin-left: auto;
+    }
+
+    .project-navigation {
+      grid-template-columns: 1fr;
+    }
+
+    .project-link {
+      padding: 52px 18px;
+    }
+
+    .project-link--next {
+      border-top: 1px solid var(--line);
+      border-left: 0;
+    }
+  }
+</style>

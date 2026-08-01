@@ -1,0 +1,338 @@
+---
+export type DisplayPhoto = {
+  id: string;
+  title: string;
+  label: string;
+  src: string;
+  width: number;
+  height: number;
+  ratio: string;
+};
+
+interface Props {
+  photos: DisplayPhoto[];
+  id?: string;
+  shuffle?: boolean;
+  eagerCount?: number;
+}
+
+const {
+  photos,
+  id = "galeria",
+  shuffle = false,
+  eagerCount = 4,
+} = Astro.props;
+---
+<section
+  class:list={["gallery", { "gallery--short": photos.length < 8 }]}
+  id={id}
+  aria-label="Galeria fotográfica"
+  data-photo-gallery
+>
+  {photos.map((photo, index) => (
+    <button
+      class="photo"
+      type="button"
+      data-index={index}
+      style={`--ratio: ${photo.ratio}`}
+      aria-label={`Abrir ${photo.title}, foto ${photo.label}`}
+    >
+      <img
+        src={photo.src}
+        alt={`${photo.title}, fotografia ${photo.label}`}
+        width={photo.width}
+        height={photo.height}
+        loading={index < eagerCount ? "eager" : "lazy"}
+        fetchpriority={index < 2 ? "high" : "auto"}
+        decoding="async"
+      />
+      <span class="photo-meta">
+        <span>{photo.title}</span>
+        <span>{photo.label}</span>
+      </span>
+    </button>
+  ))}
+</section>
+
+{shuffle && (
+  <button class="shuffle" type="button" aria-label="Reorganizar galeria" title="Reorganizar">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M4 7h3.4c4.5 0 4.7 10 9.2 10H20M17 4l3 3-3 3M4 17h3.4c1.5 0 2.5-1.2 3.4-2.8M14 9.8c.8-1.6 1.6-2.8 2.8-2.8H20M17 14l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+)}
+
+<dialog class="lightbox" aria-label="Visualizador de fotografia">
+  <div class="lightbox-inner">
+    <img class="lightbox-image" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" />
+    <div class="lightbox-caption"></div>
+  </div>
+  <button class="lightbox-close" type="button" aria-label="Fechar">
+    <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
+      <path d="m4 4 12 12M16 4 4 16" stroke="currentColor" stroke-width="1.5"/>
+    </svg>
+  </button>
+  <button class="lightbox-nav prev" type="button" aria-label="Fotografia anterior">←</button>
+  <button class="lightbox-nav next" type="button" aria-label="Próxima fotografia">→</button>
+</dialog>
+
+<script define:vars={{ photos, shuffle }}>
+  const gallery = document.querySelector("[data-photo-gallery]");
+  const buttons = [...gallery.querySelectorAll(".photo")];
+  const lightbox = document.querySelector(".lightbox");
+  const lightboxImage = document.querySelector(".lightbox-image");
+  const caption = document.querySelector(".lightbox-caption");
+  let current = 0;
+
+  const showImage = (index) => {
+    current = (index + buttons.length) % buttons.length;
+    const data = photos[Number(buttons[current].dataset.index)];
+    lightboxImage.src = data.src;
+    lightboxImage.alt = `${data.title}, fotografia ${data.label}`;
+    caption.textContent = `${data.title} · ${data.label}`;
+  };
+
+  buttons.forEach((button, index) => {
+    button.addEventListener("click", () => {
+      showImage(index);
+      lightbox.showModal();
+      document.body.style.overflow = "hidden";
+    });
+  });
+
+  const closeLightbox = () => {
+    lightbox.close();
+    document.body.style.overflow = "";
+    lightboxImage.src = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+  };
+
+  document.querySelector(".lightbox-close")?.addEventListener("click", closeLightbox);
+  document.querySelector(".lightbox-nav.prev")?.addEventListener("click", () => showImage(current - 1));
+  document.querySelector(".lightbox-nav.next")?.addEventListener("click", () => showImage(current + 1));
+  lightbox.addEventListener("click", (event) => {
+    if (event.target === lightbox || event.target.classList.contains("lightbox-inner")) closeLightbox();
+  });
+  lightbox.addEventListener("close", () => {
+    document.body.style.overflow = "";
+  });
+  document.addEventListener("keydown", (event) => {
+    if (!lightbox.open) return;
+    if (event.key === "ArrowLeft") showImage(current - 1);
+    if (event.key === "ArrowRight") showImage(current + 1);
+  });
+
+  if (shuffle) {
+    document.querySelector(".shuffle")?.addEventListener("click", () => {
+      [...buttons].sort(() => Math.random() - .5).forEach((button) => gallery.appendChild(button));
+    });
+  }
+</script>
+
+<style>
+  .gallery {
+    columns: 4;
+    column-gap: var(--gutter);
+    padding: 0 var(--gutter) var(--gutter);
+  }
+
+  .photo {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin: 0 0 var(--gutter);
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    break-inside: avoid;
+    background: #c9c8c2;
+    cursor: zoom-in;
+  }
+
+  .gallery--short {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--gutter);
+    columns: auto;
+  }
+
+  .gallery--short .photo {
+    margin-bottom: 0;
+  }
+
+  .photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--ratio);
+    object-fit: cover;
+    filter: grayscale(1);
+    transform: scale(1.002);
+    transition: filter 550ms ease, transform 650ms cubic-bezier(.2, .7, .2, 1);
+  }
+
+  .photo:hover img,
+  .photo:focus-visible img {
+    filter: grayscale(0);
+    transform: scale(1.035);
+  }
+
+  .photo-meta {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 36px 13px 11px;
+    color: white;
+    background: linear-gradient(transparent, rgba(0, 0, 0, .66));
+    font: 400 9px/1 "DM Mono", monospace;
+    letter-spacing: .08em;
+    opacity: 0;
+    text-transform: uppercase;
+    transform: translateY(6px);
+    transition: opacity 250ms ease, transform 250ms ease;
+  }
+
+  .photo:hover .photo-meta,
+  .photo:focus-visible .photo-meta {
+    opacity: 1;
+    transform: none;
+  }
+
+  .shuffle {
+    position: fixed;
+    z-index: 16;
+    bottom: 22px;
+    left: 50%;
+    display: grid;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    place-items: center;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    background: var(--paper);
+    cursor: pointer;
+    transform: translateX(-50%);
+    transition: transform 500ms cubic-bezier(.2, .75, .25, 1), background 200ms;
+  }
+
+  .shuffle:hover {
+    background: var(--accent);
+    transform: translateX(-50%) scale(1.12) rotate(180deg);
+  }
+
+  .shuffle svg {
+    width: 19px;
+  }
+
+  .lightbox {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgba(10, 10, 9, .91);
+    color: #fff;
+  }
+
+  .lightbox::backdrop {
+    background: rgba(10, 10, 9, .8);
+    backdrop-filter: blur(8px);
+  }
+
+  .lightbox-inner {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+    padding: clamp(18px, 4vw, 60px);
+  }
+
+  .lightbox-image {
+    width: auto;
+    max-width: 92vw;
+    height: auto;
+    max-height: 86dvh;
+    object-fit: contain;
+  }
+
+  .lightbox-caption {
+    position: fixed;
+    bottom: 20px;
+    left: 24px;
+    font: 400 10px/1.4 "DM Mono", monospace;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .lightbox-close,
+  .lightbox-nav {
+    position: fixed;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-radius: 50%;
+    background: rgba(20, 20, 18, .3);
+    color: #fff;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+  }
+
+  .lightbox-close {
+    top: 20px;
+    right: 20px;
+    width: 46px;
+    height: 46px;
+  }
+
+  .lightbox-nav {
+    top: 50%;
+    width: 40px;
+    height: 40px;
+    transform: translateY(-50%);
+  }
+
+  .lightbox-nav.prev {
+    left: 20px;
+  }
+
+  .lightbox-nav.next {
+    right: 20px;
+  }
+
+  @media (max-width: 1100px) {
+    .gallery {
+      columns: 3;
+    }
+
+    .gallery--short {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      columns: auto;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .gallery {
+      columns: 2;
+    }
+
+    .gallery--short {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      columns: auto;
+    }
+
+    .photo img {
+      filter: grayscale(.88);
+    }
+
+    .photo-meta {
+      display: none;
+    }
+  }
+</style>

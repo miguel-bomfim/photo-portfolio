@@ -1,0 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Manrope:wght@400;500;600;700&display=swap");
+
+:root {
+  color-scheme: light;
+  --paper: #f7f6f1;
+  --ink: #171714;
+  --muted: #98978f;
+  --line: #d8d6ce;
+  --accent: #e6a21a;
+  --panel: rgba(247, 246, 241, 0.92);
+  --gutter: clamp(8px, 1.1vw, 18px);
+  font-family: "Manrope", Helvetica, Arial, sans-serif;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #141412;
+  --ink: #f1f0e9;
+  --muted: #8e8d87;
+  --line: #343430;
+  --accent: #e6a21a;
+  --panel: rgba(20, 20, 18, 0.92);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--paper);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+button,
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.eyebrow {
+  margin: 0 0 17px;
+  color: var(--muted);
+  font: 400 10px/1.4 "DM Mono", monospace;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+}

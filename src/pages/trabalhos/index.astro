@@ -1,0 +1,161 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { getSiteData } from "../../lib/hygraph";
+
+const content = await getSiteData();
+const portfolios = content.portfolios;
+---
+<SiteLayout
+  title="Trabalhos — Sarah Heloísa"
+  description="Ensaios e histórias fotografadas por Sarah Heloísa."
+  active="works"
+>
+  <main>
+    <section class="page-intro" aria-labelledby="works-title">
+      <h1 id="works-title">Cada foto,<br />uma história.</h1>
+      <div class="page-intro-copy">
+        <p class="eyebrow">{portfolios.length} ensaios publicados</p>
+        <p>Escolha uma história para ver a série completa, na ordem em que foi pensada.</p>
+      </div>
+    </section>
+
+    <section class="works-grid" aria-label="Portfólios">
+      {portfolios.map((portfolio, index) => (
+        <a class="work-card" href={`/trabalhos/${portfolio.slug}`}>
+          <div class="work-cover">
+            <img
+              src={portfolio.portfolioThumbnail.url}
+              alt={`Capa do ensaio ${portfolio.title}`}
+              width={portfolio.portfolioThumbnail.width || 740}
+              height={portfolio.portfolioThumbnail.height || 1117}
+              loading={index < 6 ? "eager" : "lazy"}
+              fetchpriority={index < 2 ? "high" : "auto"}
+              decoding="async"
+            />
+          </div>
+          <div class="work-info">
+            <h2>{portfolio.title}</h2>
+            <span>{String(portfolio.photos.length).padStart(2, "0")} fotos ↗</span>
+          </div>
+        </a>
+      ))}
+    </section>
+  </main>
+</SiteLayout>
+
+<style>
+  .page-intro {
+    display: grid;
+    grid-template-columns: 1.25fr .75fr;
+    gap: 40px;
+    align-items: end;
+    padding: clamp(62px, 10vw, 160px) clamp(18px, 3.5vw, 64px) clamp(52px, 7vw, 100px);
+  }
+
+  .page-intro h1 {
+    max-width: 1000px;
+    margin: 0;
+    font-size: clamp(58px, 10vw, 160px);
+    font-weight: 500;
+    line-height: .82;
+    letter-spacing: -.08em;
+  }
+
+  .page-intro-copy {
+    max-width: 430px;
+    justify-self: end;
+  }
+
+  .page-intro-copy p:last-child {
+    margin: 0;
+    font-size: clamp(14px, 1.2vw, 18px);
+    line-height: 1.55;
+    letter-spacing: -.025em;
+  }
+
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(28px, 5vw, 88px) var(--gutter);
+    padding: 0 var(--gutter) clamp(100px, 12vw, 180px);
+  }
+
+  .work-card {
+    display: block;
+    text-decoration: none;
+  }
+
+  .work-cover {
+    position: relative;
+    overflow: hidden;
+    background: #c9c8c2;
+  }
+
+  .work-cover img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    filter: grayscale(1);
+    transition: filter 550ms ease, transform 650ms cubic-bezier(.2, .7, .2, 1);
+  }
+
+  .work-card:hover .work-cover img,
+  .work-card:focus-visible .work-cover img {
+    filter: grayscale(0);
+    transform: scale(1.035);
+  }
+
+  .work-info {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: baseline;
+    padding-top: 13px;
+    border-top: 1px solid var(--line);
+  }
+
+  .work-info h2 {
+    margin: 0;
+    font-size: clamp(19px, 1.8vw, 30px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -.045em;
+  }
+
+  .work-info span {
+    color: var(--muted);
+    font: 400 9px/1 "DM Mono", monospace;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 760px) {
+    .page-intro {
+      display: block;
+      padding-top: 70px;
+    }
+
+    .page-intro h1 {
+      margin-bottom: 55px;
+    }
+
+    .page-intro-copy {
+      width: 78%;
+      margin-left: auto;
+    }
+
+    .works-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 44px var(--gutter);
+    }
+
+    .work-info {
+      display: block;
+    }
+
+    .work-info span {
+      display: block;
+      margin-top: 8px;
+    }
+  }
+</style>
