@@ -1,5 +1,7 @@
 ---
-import PhotoGallery, { type DisplayPhoto } from "../../components/PhotoGallery.astro";
+import PhotoGallery, {
+  type DisplayPhoto,
+} from "../../components/PhotoGallery.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { getSiteData, type Portfolio } from "../../lib/hygraph";
 
@@ -10,8 +12,11 @@ export async function getStaticPaths() {
     props: {
       portfolio,
       previousPortfolio:
-        content.portfolios[(index - 1 + content.portfolios.length) % content.portfolios.length],
-      nextPortfolio: content.portfolios[(index + 1) % content.portfolios.length],
+        content.portfolios[
+          (index - 1 + content.portfolios.length) % content.portfolios.length
+        ],
+      nextPortfolio:
+        content.portfolios[(index + 1) % content.portfolios.length],
     },
   }));
 }
@@ -38,9 +43,11 @@ const photos: DisplayPhoto[] = portfolio.photos.map((asset, index) => ({
   height: asset.height || 1500,
 }));
 ---
+
 <SiteLayout
   title={`${portfolio.title} — Sarah Heloísa`}
-  description={portfolio.summary || `Ensaio fotográfico ${portfolio.title}, por Sarah Heloísa.`}
+  description={portfolio.summary ||
+    `Ensaio fotográfico ${portfolio.title}, por Sarah Heloísa.`}
   active="works"
 >
   <main>
@@ -51,24 +58,37 @@ const photos: DisplayPhoto[] = portfolio.photos.map((asset, index) => ({
       </div>
       <div class="project-description">
         <p class="eyebrow">{photos.length} fotografias</p>
-        <p>{portfolio.summary || "Uma história contada em luz, presença e pequenos gestos."}</p>
+        <p>
+          {
+            portfolio.summary ||
+              "Uma história contada em luz, presença e pequenos gestos."
+          }
+        </p>
       </div>
     </section>
 
     <PhotoGallery photos={photos} id={portfolio.slug} eagerCount={6} />
 
-    {previousPortfolio && nextPortfolio && (
-      <nav class="project-navigation" aria-label="Navegação entre trabalhos">
-        <a class="project-link project-link--previous" href={`/trabalhos/${previousPortfolio.slug}`}>
-          <span class="eyebrow">← Álbum anterior</span>
-          <strong>{previousPortfolio.title}</strong>
-        </a>
-        <a class="project-link project-link--next" href={`/trabalhos/${nextPortfolio.slug}`}>
-          <span class="eyebrow">Próximo álbum →</span>
-          <strong>{nextPortfolio.title}</strong>
-        </a>
-      </nav>
-    )}
+    {
+      previousPortfolio && nextPortfolio && (
+        <nav class="project-navigation" aria-label="Navegação entre trabalhos">
+          <a
+            class="project-link project-link--previous"
+            href={`/trabalhos/${previousPortfolio.slug}`}
+          >
+            <span class="eyebrow">Álbum anterior</span>
+            <strong>← {previousPortfolio.title}</strong>
+          </a>
+          <a
+            class="project-link project-link--next"
+            href={`/trabalhos/${nextPortfolio.slug}`}
+          >
+            <span class="eyebrow">Próximo álbum</span>
+            <strong>{nextPortfolio.title} →</strong>
+          </a>
+        </nav>
+      )
+    }
   </main>
 </SiteLayout>
 
@@ -107,7 +127,9 @@ const photos: DisplayPhoto[] = portfolio.photos.map((asset, index) => ({
     display: inline-block;
     margin-bottom: 24px;
     color: var(--muted);
-    font: 400 10px/1 "DM Mono", monospace;
+    font:
+      400 10px/1 "DM Mono",
+      monospace;
     text-decoration: none;
     text-transform: uppercase;
   }
@@ -127,6 +149,14 @@ const photos: DisplayPhoto[] = portfolio.photos.map((asset, index) => ({
     text-decoration: none;
   }
 
+  .project-link:hover {
+    background-color: var(--line);
+
+    .eyebrow {
+      color: var(--ink);
+    }
+  }
+
   .project-link--next {
     align-items: flex-end;
     border-left: 1px solid var(--line);
@@ -138,7 +168,7 @@ const photos: DisplayPhoto[] = portfolio.photos.map((asset, index) => ({
   }
 
   .project-link strong {
-    font-size: clamp(32px, 6vw, 94px);
+    font-size: clamp(32px, 3vw, 94px);
     font-weight: 400;
     line-height: 0.95;
     letter-spacing: -0.065em;

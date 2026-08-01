@@ -24,6 +24,8 @@
 
 * {
   box-sizing: border-box;
+  transition: all 500ms ease, color 500ms ease;
+
 }
 
 html {
@@ -36,7 +38,6 @@ body {
   margin: 0;
   color: var(--ink);
   background: var(--paper);
-  transition: background-color 300ms ease, color 300ms ease;
 }
 
 button,
