@@ -4,7 +4,22 @@ import { getSiteData } from "../../lib/hygraph";
 
 const content = await getSiteData();
 const portfolios = content.portfolios;
+
+type CoverSize = "short" | "medium" | "tall";
+
+const totalRows = Math.ceil(portfolios.length / 3);
+const coverSizes: CoverSize[] = portfolios.map((_, index) => {
+  const rowIndex = Math.floor(index / 3);
+  const columnIndex = index % 3;
+
+  if (rowIndex === totalRows - 1) return "medium";
+
+  const descending: CoverSize[] = ["tall", "medium", "short"];
+  const ascending: CoverSize[] = ["short", "medium", "tall"];
+  return (rowIndex % 2 === 0 ? descending : ascending)[columnIndex];
+});
 ---
+
 <SiteLayout
   title="Trabalhos — Sarah Heloísa"
   description="Ensaios e histórias fotografadas por Sarah Heloísa."
@@ -15,30 +30,40 @@ const portfolios = content.portfolios;
       <h1 id="works-title">Cada foto,<br />uma história.</h1>
       <div class="page-intro-copy">
         <p class="eyebrow">{portfolios.length} ensaios publicados</p>
-        <p>Escolha uma história para ver a série completa, na ordem em que foi pensada.</p>
+        <p>
+          Escolha uma história para ver a série completa, na ordem em que foi
+          pensada.
+        </p>
       </div>
     </section>
 
     <section class="works-grid" aria-label="Portfólios">
-      {portfolios.map((portfolio, index) => (
-        <a class="work-card" href={`/trabalhos/${portfolio.slug}`}>
-          <div class="work-cover">
-            <img
-              src={portfolio.portfolioThumbnail.url}
-              alt={`Capa do ensaio ${portfolio.title}`}
-              width={portfolio.portfolioThumbnail.width || 740}
-              height={portfolio.portfolioThumbnail.height || 1117}
-              loading={index < 6 ? "eager" : "lazy"}
-              fetchpriority={index < 2 ? "high" : "auto"}
-              decoding="async"
-            />
-          </div>
-          <div class="work-info">
-            <h2>{portfolio.title}</h2>
-            <span>{String(portfolio.photos.length).padStart(2, "0")} fotos ↗</span>
-          </div>
-        </a>
-      ))}
+      {
+        portfolios.map((portfolio, index) => (
+          <a
+            class:list={["work-card", `work-card--${coverSizes[index]}`]}
+            href={`/trabalhos/${portfolio.slug}`}
+          >
+            <div class="work-cover">
+              <img
+                src={portfolio.portfolioThumbnail.url}
+                alt={`Capa do ensaio ${portfolio.title}`}
+                width={portfolio.portfolioThumbnail.width || 740}
+                height={portfolio.portfolioThumbnail.height || 1117}
+                loading={index < 6 ? "eager" : "lazy"}
+                fetchpriority={index < 2 ? "high" : "auto"}
+                decoding="async"
+              />
+            </div>
+            <div class="work-info">
+              <h2>{portfolio.title}</h2>
+              <span>
+                {String(portfolio.photos.length).padStart(2, "0")} fotos ↗
+              </span>
+            </div>
+          </a>
+        ))
+      }
     </section>
   </main>
 </SiteLayout>
@@ -46,10 +71,11 @@ const portfolios = content.portfolios;
 <style>
   .page-intro {
     display: grid;
-    grid-template-columns: 1.25fr .75fr;
+    grid-template-columns: 1.25fr 0.75fr;
     gap: 40px;
     align-items: end;
-    padding: clamp(62px, 10vw, 160px) clamp(18px, 3.5vw, 64px) clamp(52px, 7vw, 100px);
+    padding: clamp(62px, 10vw, 160px) clamp(18px, 3.5vw, 64px)
+      clamp(52px, 7vw, 100px);
   }
 
   .page-intro h1 {
@@ -57,8 +83,8 @@ const portfolios = content.portfolios;
     margin: 0;
     font-size: clamp(58px, 10vw, 160px);
     font-weight: 500;
-    line-height: .82;
-    letter-spacing: -.08em;
+    line-height: 0.82;
+    letter-spacing: -0.08em;
   }
 
   .page-intro-copy {
@@ -70,7 +96,7 @@ const portfolios = content.portfolios;
     margin: 0;
     font-size: clamp(14px, 1.2vw, 18px);
     line-height: 1.55;
-    letter-spacing: -.025em;
+    letter-spacing: -0.025em;
   }
 
   .works-grid {
@@ -81,12 +107,22 @@ const portfolios = content.portfolios;
   }
 
   .work-card {
+    --cover-ratio: 4 / 5;
     display: block;
     text-decoration: none;
   }
 
+  .work-card--tall {
+    --cover-ratio: 2 / 3;
+  }
+
+  .work-card--short {
+    --cover-ratio: 1 / 1;
+  }
+
   .work-cover {
     position: relative;
+    aspect-ratio: var(--cover-ratio);
     overflow: hidden;
     background: #c9c8c2;
   }
@@ -94,10 +130,12 @@ const portfolios = content.portfolios;
   .work-cover img {
     display: block;
     width: 100%;
-    aspect-ratio: 4 / 5;
+    height: 100%;
     object-fit: cover;
     filter: grayscale(1);
-    transition: filter 550ms ease, transform 650ms cubic-bezier(.2, .7, .2, 1);
+    transition:
+      filter 550ms ease,
+      transform 650ms cubic-bezier(0.2, 0.7, 0.2, 1);
   }
 
   .work-card:hover .work-cover img,
@@ -120,12 +158,14 @@ const portfolios = content.portfolios;
     font-size: clamp(19px, 1.8vw, 30px);
     font-weight: 500;
     line-height: 1.1;
-    letter-spacing: -.045em;
+    letter-spacing: -0.045em;
   }
 
   .work-info span {
     color: var(--muted);
-    font: 400 9px/1 "DM Mono", monospace;
+    font:
+      400 9px/1 "DM Mono",
+      monospace;
     white-space: nowrap;
   }
 
@@ -147,6 +187,10 @@ const portfolios = content.portfolios;
     .works-grid {
       grid-template-columns: 1fr 1fr;
       gap: 44px var(--gutter);
+    }
+
+    .works-grid .work-card {
+      --cover-ratio: 4 / 5;
     }
 
     .work-info {
