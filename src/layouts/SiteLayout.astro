@@ -20,6 +20,16 @@ const { title, description, active = "home" } = Astro.props;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>{title}</title>
     <script is:inline>
+      const cursorMedia = matchMedia("(hover: hover) and (pointer: fine)");
+      if (cursorMedia.matches) {
+        document.documentElement.classList.add("custom-cursor-pending");
+        window.setTimeout(() => {
+          if (!document.documentElement.classList.contains("has-custom-cursor")) {
+            document.documentElement.classList.remove("custom-cursor-pending");
+          }
+        }, 2500);
+      }
+
       const savedTheme = localStorage.getItem("sarah-theme");
       const theme = savedTheme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
       document.documentElement.dataset.theme = theme;

@@ -9,11 +9,37 @@
 
   if (cursor && finePointer.matches) {
     document.documentElement.classList.add("has-custom-cursor");
+    document.documentElement.classList.remove("custom-cursor-pending");
+
+    const cursorHome = cursor.parentNode;
+    const cursorAnchor = cursor.nextSibling;
+
+    const restoreCursor = () => {
+      if (!cursorHome || cursor.parentNode === cursorHome) return;
+      cursorHome.insertBefore(cursor, cursorAnchor);
+    };
+
+    document.querySelectorAll<HTMLDialogElement>(".lightbox").forEach((dialog) => {
+      const syncCursorLayer = () => {
+        if (dialog.open) {
+          dialog.appendChild(cursor);
+        } else {
+          restoreCursor();
+        }
+      };
+
+      new MutationObserver(syncCursorLayer).observe(dialog, {
+        attributes: true,
+        attributeFilter: ["open"],
+      });
+      dialog.addEventListener("close", syncCursorLayer);
+    });
 
     let targetX = -100;
     let targetY = -100;
     let currentX = targetX;
     let currentY = targetY;
+    let hasPointerPosition = false;
 
     const render = () => {
       const ease = reducedMotion.matches ? 1 : 0.22;
@@ -26,6 +52,14 @@
     document.addEventListener("pointermove", (event) => {
       targetX = event.clientX;
       targetY = event.clientY;
+
+      if (!hasPointerPosition) {
+        currentX = targetX;
+        currentY = targetY;
+        cursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+        hasPointerPosition = true;
+      }
+
       cursor.classList.add("is-visible");
 
       const target = event.target instanceof Element ? event.target : null;
@@ -33,8 +67,12 @@
         target?.closest(".photo, .work-cover, .lightbox-inner"),
       );
       const overInteractive = Boolean(target?.closest("a, button"));
+      const overInverseSurface = Boolean(target?.closest(".footer"));
+      const overLightbox = Boolean(target?.closest(".lightbox"));
 
       cursor.classList.toggle("is-over-photo", overPhoto);
+      cursor.classList.toggle("is-over-inverse", overInverseSurface);
+      cursor.classList.toggle("is-over-lightbox", overLightbox);
       cursor.classList.toggle(
         "is-over-interactive",
         overInteractive && !overPhoto,
@@ -88,6 +126,7 @@
       height 280ms cubic-bezier(0.2, 0.75, 0.25, 1),
       border-color 180ms ease,
       background-color 180ms ease,
+      box-shadow 180ms ease,
       transform 140ms ease;
   }
 
@@ -98,6 +137,10 @@
   .site-cursor.is-over-interactive .site-cursor-dot {
     width: 22px;
     height: 22px;
+  }
+
+  .site-cursor.is-over-inverse .site-cursor-dot {
+    border-color: var(--paper);
   }
 
   .site-cursor.is-over-photo {
@@ -111,6 +154,16 @@
     background: #fff;
   }
 
+  .site-cursor.is-over-lightbox {
+    mix-blend-mode: normal;
+  }
+
+  .site-cursor.is-over-lightbox .site-cursor-dot {
+    border-color: #fff;
+    background: rgba(255, 255, 255, .14);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, .24);
+  }
+
   .site-cursor.is-pressed .site-cursor-dot {
     transform: translate(-50%, -50%) scale(0.82);
   }
@@ -121,7 +174,9 @@
     }
 
     :global(html.has-custom-cursor),
-    :global(html.has-custom-cursor *) {
+    :global(html.has-custom-cursor *),
+    :global(html.custom-cursor-pending),
+    :global(html.custom-cursor-pending *) {
       cursor: none !important;
     }
   }
