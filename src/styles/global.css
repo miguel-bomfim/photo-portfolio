@@ -6,7 +6,7 @@
   --ink: #171714;
   --muted: #98978f;
   --line: #d8d6ce;
-  --accent: #e6a21a;
+  --accent: #bdd599;
   --panel: rgba(247, 246, 241, 0.92);
   --gutter: clamp(8px, 1.1vw, 18px);
   font-family: "Manrope", Helvetica, Arial, sans-serif;
@@ -18,7 +18,7 @@
   --ink: #f1f0e9;
   --muted: #8e8d87;
   --line: #343430;
-  --accent: #e6a21a;
+  --accent: #bdd599;
   --panel: rgba(20, 20, 18, 0.92);
 }
 

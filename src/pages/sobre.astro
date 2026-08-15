@@ -1,0 +1,313 @@
+---
+import ContactFooter from "../components/ContactFooter.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { getSiteData } from "../lib/hygraph";
+
+const content = await getSiteData();
+const about = content.aboutMes[0];
+const home = content.homePages[0];
+const portrait = about?.photo;
+
+const biography =
+  about?.summary.text?.trim() ||
+  "Fotografia feita de presença, espontaneidade e histórias reais.";
+const biographyParagraphs = biography
+  .split(/(?:\r?\n|\\n)+/)
+  .map((paragraph) => paragraph.trim())
+  .filter(Boolean);
+const heroLead =
+  home?.spoilerText ||
+  biographyParagraphs[0] ||
+  "Um olhar atento para aquilo que merece permanecer.";
+---
+
+<SiteLayout
+  title={`Sobre ${about?.name || "Sarah Heloísa"} — Fotografia`}
+  description={`Conheça ${about?.name || "Sarah Heloísa"}, seu olhar e sua trajetória na fotografia.`}
+  active="about"
+>
+  <main>
+    <section class="about-hero" aria-labelledby="about-title">
+      <div class="about-hero-copy">
+        <p class="eyebrow">Sobre a fotógrafa</p>
+        <h1 id="about-title">Por trás<br />do <em>olhar.</em></h1>
+        <p class="about-lead">{heroLead}</p>
+      </div>
+
+      {portrait && (
+        <figure class="about-portrait" data-cursor-photo>
+          <img
+            src={portrait.url}
+            alt={`Retrato de ${about?.name || "Sarah Heloísa"}`}
+            width={portrait.width || 900}
+            height={portrait.height || 1200}
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <figcaption>
+            <span>{about?.name || "Sarah Heloísa"}</span>
+            <span>Fotógrafa · Brasil</span>
+          </figcaption>
+        </figure>
+      )}
+    </section>
+
+    <section class="about-story" aria-labelledby="story-title">
+      <div class="story-index">
+        <p class="eyebrow">Trajetória</p>
+        <span>01 — Presença</span>
+      </div>
+      <div class="story-content">
+        <h2 id="story-title">A fotografia começa antes do clique.</h2>
+        <div class="biography">
+          {biographyParagraphs.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="manifesto"
+      aria-label="Filosofia de trabalho"
+      data-cursor-inverse
+    >
+      <p class="eyebrow">Filosofia</p>
+      <p class="manifesto-line">Presença antes<br />da <em>pose.</em></p>
+    </section>
+
+    <section class="about-facts" aria-label="Informações profissionais">
+      <div>
+        <p class="fact-label">Base</p>
+        <p>Brasil<br />Disponível para viajar</p>
+      </div>
+      <div>
+        <p class="fact-label">Atuação</p>
+        <p>Retratos<br />Editorial · Lifestyle</p>
+      </div>
+      <div>
+        <p class="fact-label">Portfólio</p>
+        <p>{content.portfolios.length} histórias publicadas<br /><a href="/trabalhos">Conhecer trabalhos ↗</a></p>
+      </div>
+    </section>
+  </main>
+
+  <ContactFooter name={about?.name || "Sarah Heloísa"} />
+</SiteLayout>
+
+<style>
+  .about-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+    min-height: calc(100svh - 112px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .about-hero-copy {
+    display: flex;
+    padding: clamp(70px, 9vw, 145px) clamp(24px, 5vw, 90px);
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .about-hero h1 {
+    margin: clamp(45px, 7vw, 110px) 0;
+    font-size: clamp(68px, 10vw, 158px);
+    font-weight: 500;
+    line-height: 0.82;
+    letter-spacing: -0.08em;
+  }
+
+  .about-hero h1 em,
+  .manifesto-line em {
+    color: var(--accent);
+    font-style: normal;
+  }
+
+  .about-lead {
+    width: min(100%, 520px);
+    margin: 0 0 0 auto;
+    font-size: clamp(17px, 1.55vw, 24px);
+    line-height: 1.4;
+    letter-spacing: -0.035em;
+  }
+
+  .about-portrait {
+    position: relative;
+    min-height: 680px;
+    margin: 0;
+    overflow: hidden;
+    background: #c9c8c2;
+  }
+
+  .about-portrait img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.8);
+    transition: filter 600ms ease, transform 900ms cubic-bezier(0.2, 0.75, 0.25, 1);
+  }
+
+  .about-portrait:hover img {
+    filter: grayscale(0.15);
+    transform: scale(1.018);
+  }
+
+  .about-portrait figcaption {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 48px 18px 16px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.64));
+    color: #fff;
+    font: 400 9px/1.3 "DM Mono", monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .about-story {
+    display: grid;
+    grid-template-columns: 0.55fr 1.45fr;
+    gap: clamp(40px, 8vw, 150px);
+    padding: clamp(100px, 13vw, 200px) clamp(24px, 5vw, 90px);
+  }
+
+  .story-index span,
+  .fact-label {
+    color: var(--muted);
+    font: 400 9px/1.4 "DM Mono", monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .story-content {
+    max-width: 920px;
+  }
+
+  .story-content h2 {
+    max-width: 870px;
+    margin: 0 0 clamp(60px, 8vw, 120px);
+    font-size: clamp(42px, 6.3vw, 98px);
+    font-weight: 500;
+    line-height: 0.95;
+    letter-spacing: -0.07em;
+  }
+
+  .biography {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px clamp(28px, 5vw, 76px);
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+
+  .biography p {
+    margin: 0;
+    font-size: clamp(15px, 1.25vw, 19px);
+    line-height: 1.65;
+  }
+
+  .manifesto {
+    min-height: 72vh;
+    padding: clamp(70px, 9vw, 130px) clamp(24px, 5vw, 90px);
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .manifesto-line {
+    margin: clamp(70px, 11vw, 170px) 0 0;
+    font-size: clamp(64px, 11vw, 174px);
+    line-height: 0.82;
+    letter-spacing: -0.085em;
+  }
+
+  .about-facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-bottom: 1px solid var(--line);
+  }
+
+  .about-facts > div {
+    min-height: 260px;
+    padding: 38px clamp(24px, 4vw, 64px);
+    border-right: 1px solid var(--line);
+  }
+
+  .about-facts > div:last-child {
+    border-right: 0;
+  }
+
+  .about-facts p:last-child {
+    margin: clamp(55px, 7vw, 100px) 0 0;
+    font-size: clamp(16px, 1.35vw, 21px);
+    line-height: 1.45;
+  }
+
+  .about-facts a {
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+
+  @media (max-width: 760px) {
+    .about-hero {
+      display: flex;
+      min-height: auto;
+      flex-direction: column;
+    }
+
+    .about-hero-copy {
+      min-height: 66svh;
+      padding: 68px 18px 54px;
+    }
+
+    .about-hero h1 {
+      margin: 58px 0;
+      font-size: clamp(66px, 21vw, 92px);
+    }
+
+    .about-lead {
+      width: 78%;
+    }
+
+    .about-portrait {
+      min-height: auto;
+      aspect-ratio: 4 / 5;
+    }
+
+    .about-story {
+      display: block;
+      padding: 95px 18px;
+    }
+
+    .story-index {
+      margin-bottom: 68px;
+    }
+
+    .biography {
+      grid-template-columns: 1fr;
+    }
+
+    .manifesto {
+      min-height: 64vh;
+      padding: 70px 18px;
+    }
+
+    .manifesto-line {
+      margin-top: 100px;
+    }
+
+    .about-facts {
+      grid-template-columns: 1fr;
+    }
+
+    .about-facts > div {
+      min-height: 220px;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+  }
+</style>

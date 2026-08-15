@@ -10,6 +10,7 @@ interface Props {
 
 const { title, description, active = "home" } = Astro.props;
 ---
+
 <!doctype html>
 <html lang="pt-BR">
   <head>
@@ -17,21 +18,25 @@ const { title, description, active = "home" } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#f7f6f1" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
     <title>{title}</title>
     <script is:inline>
       const cursorMedia = matchMedia("(hover: hover) and (pointer: fine)");
       if (cursorMedia.matches) {
         document.documentElement.classList.add("custom-cursor-pending");
         window.setTimeout(() => {
-          if (!document.documentElement.classList.contains("has-custom-cursor")) {
+          if (
+            !document.documentElement.classList.contains("has-custom-cursor")
+          ) {
             document.documentElement.classList.remove("custom-cursor-pending");
           }
         }, 2500);
       }
 
       const savedTheme = localStorage.getItem("sarah-theme");
-      const theme = savedTheme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      const theme =
+        savedTheme ||
+        (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
       document.documentElement.dataset.theme = theme;
     </script>
   </head>
@@ -40,22 +45,27 @@ const { title, description, active = "home" } = Astro.props;
 
     <header class="site-header">
       <a class="brand" href="/" aria-label="Sarah, página inicial">
-        Sarah
+        Sarah Heloísa
         <small>Fotógrafa · Brasil</small>
       </a>
 
-      <a class="mark-link" href="/" aria-label="Ir para a página inicial">
-        <img class="mark" src="/mark.svg" alt="" aria-hidden="true" />
-      </a>
-
       <nav class="nav" aria-label="Navegação principal">
-        <a class:list={{ "desktop-link": true, "is-active": active === "home" }} href="/">Início</a>
-        <a class:list={{ "is-active": active === "works" }} href="/trabalhos">Trabalhos</a>
-        <a class="desktop-link" href="/#sobre">Sobre</a>
-        <a href="/#contato">Contato</a>
+        <a
+          class:list={{ "desktop-link": true, "is-active": active === "home" }}
+          href="/">Início</a
+        >
+        <a class:list={{ "is-active": active === "works" }} href="/trabalhos"
+          >Trabalhos</a
+        >
+        <a class:list={{ "is-active": active === "about" }} href="/sobre"
+          >Sobre</a
+        >
+        <a class="desktop-link" href="/#contato">Contato</a>
         <button class="theme-toggle" type="button" aria-label="Alternar tema">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M20 15.2A8.4 8.4 0 0 1 8.8 4 8.5 8.5 0 1 0 20 15.2Z" fill="currentColor"/>
+            <path
+              d="M20 15.2A8.4 8.4 0 0 1 8.8 4 8.5 8.5 0 1 0 20 15.2Z"
+              fill="currentColor"></path>
           </svg>
         </button>
       </nav>
@@ -65,13 +75,18 @@ const { title, description, active = "home" } = Astro.props;
 
     <script is:inline>
       const setThemeColor = () => {
-        const color = getComputedStyle(document.documentElement).getPropertyValue("--paper").trim();
-        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", color);
+        const color = getComputedStyle(document.documentElement)
+          .getPropertyValue("--paper")
+          .trim();
+        document
+          .querySelector('meta[name="theme-color"]')
+          ?.setAttribute("content", color);
       };
       setThemeColor();
 
       document.querySelector(".theme-toggle")?.addEventListener("click", () => {
-        const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        const next =
+          document.documentElement.dataset.theme === "dark" ? "light" : "dark";
         document.documentElement.dataset.theme = next;
         localStorage.setItem("sarah-theme", next);
         setThemeColor();
@@ -86,7 +101,7 @@ const { title, description, active = "home" } = Astro.props;
     z-index: 20;
     top: 0;
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
     min-height: 112px;
     padding: 18px clamp(18px, 2.5vw, 44px);
@@ -99,27 +114,24 @@ const { title, description, active = "home" } = Astro.props;
     font-size: clamp(17px, 1.4vw, 23px);
     font-weight: 600;
     text-decoration: none;
-    letter-spacing: -.04em;
+    letter-spacing: -0.04em;
   }
 
   .brand small {
     display: block;
     margin-top: 3px;
     color: var(--muted);
-    font: 300 9px/1 "DM Mono", monospace;
-    letter-spacing: .11em;
+    font:
+      300 9px/1 "DM Mono",
+      monospace;
+    letter-spacing: 0.11em;
     text-transform: uppercase;
-  }
-
-  .mark-link {
-    display: block;
-    line-height: 0;
   }
 
   .mark {
     width: 50px;
     color: var(--accent);
-    transition: transform 450ms cubic-bezier(.2, .75, .25, 1);
+    transition: transform 450ms cubic-bezier(0.2, 0.75, 0.25, 1);
   }
 
   .mark:hover {
@@ -141,8 +153,10 @@ const { title, description, active = "home" } = Astro.props;
     background: none;
     color: var(--muted);
     cursor: pointer;
-    font: 500 clamp(11px, .85vw, 14px)/1 "DM Mono", monospace;
-    letter-spacing: -.03em;
+    font:
+      500 clamp(11px, 0.85vw, 14px)/1 "DM Mono",
+      monospace;
+    letter-spacing: -0.03em;
     text-decoration: none;
     text-transform: uppercase;
   }
@@ -195,16 +209,6 @@ const { title, description, active = "home" } = Astro.props;
       min-height: 78px;
       grid-template-columns: 1fr auto;
       padding: 12px 16px;
-    }
-
-    .mark-link {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .mark-link .mark {
-      width: 38px;
     }
 
     .brand small,

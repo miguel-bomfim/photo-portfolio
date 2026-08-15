@@ -64,10 +64,14 @@
 
       const target = event.target instanceof Element ? event.target : null;
       const overPhoto = Boolean(
-        target?.closest(".photo, .work-cover, .lightbox-inner"),
+        target?.closest(
+          ".photo, .work-cover, .lightbox-inner, [data-cursor-photo]",
+        ),
       );
       const overInteractive = Boolean(target?.closest("a, button"));
-      const overInverseSurface = Boolean(target?.closest(".footer"));
+      const overInverseSurface = Boolean(
+        target?.closest(".footer, [data-cursor-inverse]"),
+      );
       const overLightbox = Boolean(target?.closest(".lightbox"));
 
       cursor.classList.toggle("is-over-photo", overPhoto);
