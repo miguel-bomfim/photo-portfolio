@@ -5,7 +5,7 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description: string;
-  active?: "home" | "works" | "about";
+  active?: "home" | "works" | "about" | "contact";
 }
 
 const { title, description, active = "home" } = Astro.props;
@@ -60,7 +60,12 @@ const { title, description, active = "home" } = Astro.props;
         <a class:list={{ "is-active": active === "about" }} href="/sobre"
           >Sobre</a
         >
-        <a class="desktop-link" href="/#contato">Contato</a>
+        <a
+          class:list={{
+            "is-active": active === "contact",
+          }}
+          href="/contato">Contato</a
+        >
         <button class="theme-toggle" type="button" aria-label="Alternar tema">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path

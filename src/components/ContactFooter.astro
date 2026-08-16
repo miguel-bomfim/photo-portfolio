@@ -1,14 +1,14 @@
 ---
+import { contactInfo } from "../lib/contact";
+
 interface Props {
   name?: string;
-  email?: string;
   instagramHref?: string;
 }
 
 const {
   name = "Sarah Heloísa",
-  email = "ola@sarahfoto.com",
-  instagramHref = "#",
+  instagramHref = contactInfo.instagramUrl,
 } = Astro.props;
 const year = new Date().getFullYear();
 ---
@@ -16,10 +16,10 @@ const year = new Date().getFullYear();
 <footer class="footer" id="contato">
   <div>
     <p class="eyebrow">Vamos criar algo juntos</p>
-    <a class="footer-email" href={`mailto:${email}`}>Diga olá ↗</a>
+    <a class="footer-email" href="/contato">Diga olá ↗</a>
   </div>
   <div class="footer-meta">
-    <a href={instagramHref} rel="noreferrer">Instagram ↗</a><br />
+    <a href={instagramHref} target="_blank" rel="noreferrer">Instagram ↗</a><br />
     © {year} {name}
   </div>
 </footer>
