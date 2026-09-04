@@ -1,11 +1,22 @@
 ---
 import SiteLayout from "../layouts/SiteLayout.astro";
 import { contactInfo } from "../lib/contact";
+import { getSiteData } from "../lib/hygraph";
+
+const content = await getSiteData();
+const settings = content.siteSettings;
+const contact = {
+  email: settings?.email || contactInfo.email,
+  instagramUrl: settings?.instagramUrl || contactInfo.instagramUrl,
+  instagramLabel: settings?.instagramHandle || contactInfo.instagramLabel,
+  location: settings?.location || contactInfo.location,
+  responseTime: settings?.responseTime || contactInfo.responseTime,
+};
 ---
 
 <SiteLayout
-  title="Contato — Sarah Heloísa Fotografia"
-  description="Entre em contato com Sarah Heloísa para conversar sobre ensaios, retratos e projetos fotográficos."
+  title="Contato — Sarah Heloísa"
+  description="Entre em contato com Sarah Heloísa para conversar sobre publicidade, social media e fotografia."
   active="contact"
 >
   <main class="contact-page">
@@ -17,31 +28,31 @@ import { contactInfo } from "../lib/contact";
 
       <div class="contact-note">
         <p>
-          Conte um pouco sobre você, a ocasião e o que gostaria de guardar em
-          imagens. Responderei com calma e todas as informações necessárias.
+          Conte um pouco sobre a sua ideia, marca ou história. Responderei com
+          calma para entender o contexto e pensar no melhor caminho.
         </p>
-        <span>Ensaios · Retratos · Projetos autorais</span>
+        <span>Publicidade · Social media · Fotografia</span>
       </div>
 
       <div class="contact-at" aria-hidden="true">@</div>
     </section>
 
     <section class="contact-channels" aria-label="Canais de contato">
-      <a class="channel" href={`mailto:${contactInfo.email}`}>
+      <a class="channel" href={`mailto:${contact.email}`}>
         <span class="channel-label">E-mail</span>
-        <strong>{contactInfo.email}</strong>
+        <strong>{contact.email}</strong>
         <span class="channel-arrow" aria-hidden="true">↗</span>
       </a>
 
       <a
         class="channel"
-        href={contactInfo.instagramUrl}
+        href={contact.instagramUrl}
         target="_blank"
         rel="noreferrer"
         aria-label="Abrir Instagram em uma nova aba"
       >
         <span class="channel-label">Instagram</span>
-        <strong>{contactInfo.instagramLabel}</strong>
+        <strong>{contact.instagramLabel}</strong>
         <span class="channel-arrow" aria-hidden="true">↗</span>
       </a>
     </section>
@@ -49,11 +60,11 @@ import { contactInfo } from "../lib/contact";
     <section class="contact-details" aria-label="Informações de atendimento">
       <div>
         <p class="detail-label">Base</p>
-        <p>{contactInfo.location}<br />Disponível para viajar</p>
+        <p>{contact.location}<br />Disponível para novos projetos</p>
       </div>
       <div>
         <p class="detail-label">Retorno</p>
-        <p>{contactInfo.responseTime}<br />De segunda a sexta</p>
+        <p>{contact.responseTime}<br />De segunda a sexta</p>
       </div>
       <div>
         <p class="detail-label">Instagram</p>
@@ -63,7 +74,7 @@ import { contactInfo } from "../lib/contact";
 
     <section class="contact-closing" data-cursor-inverse>
       <p class="eyebrow">Próxima história</p>
-      <a href={`mailto:${contactInfo.email}`}>Escreva para mim <span>↗</span></a>
+      <a href={`mailto:${contact.email}`}>Escreva para mim <span>↗</span></a>
       <p>© {new Date().getFullYear()} Sarah Heloísa</p>
     </section>
   </main>

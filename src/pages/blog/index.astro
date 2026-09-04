@@ -1,0 +1,14 @@
+---
+import BlogListing from "../../components/BlogListing.astro";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { getSiteData } from "../../lib/hygraph";
+
+const PAGE_SIZE = 6;
+const content = await getSiteData();
+const posts = content.blogs.slice(0, PAGE_SIZE);
+const totalPages = Math.max(1, Math.ceil(content.blogs.length / PAGE_SIZE));
+---
+
+<SiteLayout title="Blog — Sarah Heloísa" description="Ideias, processos e referências sobre publicidade, conteúdo e imagem." active="blog">
+  <BlogListing posts={posts} currentPage={1} totalPages={totalPages} totalPosts={content.blogs.length} startIndex={0} />
+</SiteLayout>

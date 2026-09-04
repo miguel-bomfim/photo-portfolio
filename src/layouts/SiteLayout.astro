@@ -5,7 +5,7 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description: string;
-  active?: "home" | "works" | "about" | "contact";
+  active?: "home" | "works" | "about" | "blog" | "contact";
 }
 
 const { title, description, active = "home" } = Astro.props;
@@ -46,7 +46,7 @@ const { title, description, active = "home" } = Astro.props;
     <header class="site-header">
       <a class="brand" href="/" aria-label="Sarah, página inicial">
         Sarah Heloísa
-        <small>Fotógrafa · Brasil</small>
+        <small>Publicitária · Fotógrafa</small>
       </a>
 
       <nav class="nav" aria-label="Navegação principal">
@@ -59,6 +59,9 @@ const { title, description, active = "home" } = Astro.props;
         >
         <a class:list={{ "is-active": active === "about" }} href="/sobre"
           >Sobre</a
+        >
+        <a class:list={{ "is-active": active === "blog" }} href="/blog"
+          >Blog</a
         >
         <a
           class:list={{

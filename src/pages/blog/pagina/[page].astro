@@ -1,0 +1,40 @@
+---
+import BlogListing from "../../../components/BlogListing.astro";
+import SiteLayout from "../../../layouts/SiteLayout.astro";
+import { getSiteData, type BlogPost } from "../../../lib/hygraph";
+
+export async function getStaticPaths() {
+  const pageSize = 6;
+  const content = await getSiteData();
+  const totalPages = Math.ceil(content.blogs.length / pageSize);
+
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => {
+    const page = index + 2;
+    const startIndex = (page - 1) * pageSize;
+    return {
+      params: { page: String(page) },
+      props: {
+        posts: content.blogs.slice(startIndex, startIndex + pageSize),
+        currentPage: page,
+        totalPages,
+        totalPosts: content.blogs.length,
+        startIndex,
+      },
+    };
+  });
+}
+
+interface Props {
+  posts: BlogPost[];
+  currentPage: number;
+  totalPages: number;
+  totalPosts: number;
+  startIndex: number;
+}
+
+const { posts, currentPage, totalPages, totalPosts, startIndex } = Astro.props;
+---
+
+<SiteLayout title={`Blog — Página ${currentPage} — Sarah Heloísa`} description="Ideias, processos e referências sobre publicidade, conteúdo e imagem." active="blog">
+  <BlogListing {posts} {currentPage} {totalPages} {totalPosts} {startIndex} />
+</SiteLayout>

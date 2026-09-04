@@ -5,7 +5,6 @@ import { getSiteData } from "../lib/hygraph";
 
 const content = await getSiteData();
 const about = content.aboutMes[0];
-const home = content.homePages[0];
 const portrait = about?.photo;
 
 const biography =
@@ -16,21 +15,20 @@ const biographyParagraphs = biography
   .map((paragraph) => paragraph.trim())
   .filter(Boolean);
 const heroLead =
-  home?.spoilerText ||
-  biographyParagraphs[0] ||
-  "Um olhar atento para aquilo que merece permanecer.";
+  about?.shortBio ||
+  "Publicitária, social media e fotógrafa. Uno estratégia e sensibilidade para transformar ideias em narrativas que encontram as pessoas.";
 ---
 
 <SiteLayout
-  title={`Sobre ${about?.name || "Sarah Heloísa"} — Fotografia`}
-  description={`Conheça ${about?.name || "Sarah Heloísa"}, seu olhar e sua trajetória na fotografia.`}
+  title={`Sobre ${about?.name || "Sarah Heloísa"} — Publicidade e fotografia`}
+  description={`Conheça ${about?.name || "Sarah Heloísa"}, sua trajetória em publicidade, social media e fotografia.`}
   active="about"
 >
   <main>
     <section class="about-hero" aria-labelledby="about-title">
       <div class="about-hero-copy">
-        <p class="eyebrow">Sobre a fotógrafa</p>
-        <h1 id="about-title">Por trás<br />do <em>olhar.</em></h1>
+        <p class="eyebrow">Sobre a profissional</p>
+        <h1 id="about-title">Ideias com<br /><em>direção.</em></h1>
         <p class="about-lead">{heroLead}</p>
       </div>
 
@@ -47,7 +45,7 @@ const heroLead =
           />
           <figcaption>
             <span>{about?.name || "Sarah Heloísa"}</span>
-            <span>Fotógrafa · Brasil</span>
+            <span>Publicitária · Fotógrafa</span>
           </figcaption>
         </figure>
       )}
@@ -56,10 +54,10 @@ const heroLead =
     <section class="about-story" aria-labelledby="story-title">
       <div class="story-index">
         <p class="eyebrow">Trajetória</p>
-        <span>01 — Presença</span>
+        <span>01 — Trajetória</span>
       </div>
       <div class="story-content">
-        <h2 id="story-title">A fotografia começa antes do clique.</h2>
+        <h2 id="story-title">Comunicação começa com escuta.</h2>
         <div class="biography">
           {biographyParagraphs.map((paragraph) => <p>{paragraph}</p>)}
         </div>
@@ -72,7 +70,7 @@ const heroLead =
       data-cursor-inverse
     >
       <p class="eyebrow">Filosofia</p>
-      <p class="manifesto-line">Presença antes<br />da <em>pose.</em></p>
+      <p class="manifesto-line">Estratégia com<br /><em>sensibilidade.</em></p>
     </section>
 
     <section class="about-facts" aria-label="Informações profissionais">
@@ -82,11 +80,11 @@ const heroLead =
       </div>
       <div>
         <p class="fact-label">Atuação</p>
-        <p>Retratos<br />Editorial · Lifestyle</p>
+        <p>{about?.roles?.join(" · ") || "Publicidade · Social media"}<br />Fotografia</p>
       </div>
       <div>
         <p class="fact-label">Portfólio</p>
-        <p>{content.portfolios.length} histórias publicadas<br /><a href="/trabalhos">Conhecer trabalhos ↗</a></p>
+        <p>{content.portfolios.length + content.professionalProjects.length} trabalhos publicados<br /><a href="/trabalhos">Conhecer trabalhos ↗</a></p>
       </div>
     </section>
   </main>
