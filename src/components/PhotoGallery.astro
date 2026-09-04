@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+
 export type DisplayPhoto = {
   id: string;
   title: string;
@@ -22,6 +24,11 @@ const {
   shuffle = false,
   eagerCount = 4,
 } = Astro.props;
+
+const optimizedWidth = (photo: DisplayPhoto) => Math.min(photo.width, 960);
+const optimizedHeight = (photo: DisplayPhoto) => Math.round(photo.height * optimizedWidth(photo) / photo.width);
+const responsiveWidths = (photo: DisplayPhoto) => [320, 480, 640, 960]
+  .filter((width) => width <= optimizedWidth(photo));
 ---
 <section
   class:list={["gallery", { "gallery--short": photos.length < 8 }]}
@@ -37,11 +44,14 @@ const {
       style={`--ratio: ${photo.ratio}`}
       aria-label={`Abrir ${photo.title}, foto ${photo.label}`}
     >
-      <img
+      <Image
         src={photo.src}
         alt={`${photo.title}, fotografia ${photo.label}`}
-        width={photo.width}
-        height={photo.height}
+        width={optimizedWidth(photo)}
+        height={optimizedHeight(photo)}
+        widths={responsiveWidths(photo)}
+        sizes="(max-width: 760px) 50vw, (max-width: 1100px) 33vw, 25vw"
+        format="webp"
         loading={index < eagerCount ? "eager" : "lazy"}
         fetchpriority={index < 2 ? "high" : "auto"}
         decoding="async"
