@@ -109,7 +109,7 @@ const coverSizes: CoverSize[] = works.map((_, index) => {
 </script>
 
 <style>
-  .page-intro { display:grid; grid-template-columns:1.25fr .75fr; gap:40px; align-items:end; padding:clamp(62px,10vw,160px) clamp(18px,3.5vw,64px) clamp(52px,7vw,100px); }
+  .page-intro { display:grid; grid-template-columns:1.25fr .75fr; gap:40px; align-items:end; min-height:calc(78svh - 112px); padding:clamp(28px,3.5vw,54px) clamp(18px,3.5vw,64px); }
   .page-intro h1 { margin:0; font-size:clamp(58px,10vw,160px); font-weight:500; line-height:.82; letter-spacing:-.08em; }
   .page-intro h1 em { color:var(--accent); font-style:normal; }
   .page-intro-copy { max-width:430px; justify-self:end; }
@@ -132,7 +132,7 @@ const coverSizes: CoverSize[] = works.map((_, index) => {
   .work-info span { color:var(--muted); font:400 9px/1 "DM Mono",monospace; white-space:nowrap; text-transform:uppercase; }
   .empty-filter { min-height:45vh; margin:0; padding:20px clamp(18px,3.5vw,64px); color:var(--muted); font:400 12px/1.5 "DM Mono",monospace; text-transform:uppercase; }
   @media(max-width:760px){
-    .page-intro { display:block; padding-top:70px; }
+    .page-intro { display:block; min-height:auto; padding:44px 18px; }
     .page-intro h1 { margin-bottom:55px; }
     .page-intro-copy { width:78%; margin-left:auto; }
     .filters { gap:7px; overflow-x:auto; padding-bottom:55px; }
