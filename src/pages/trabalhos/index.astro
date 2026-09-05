@@ -33,7 +33,7 @@ const coverSizes: CoverSize[] = works.map((_, index) => {
 >
   <main>
     <section class="page-intro" aria-labelledby="works-title">
-      <h1 id="works-title">Ideias que<br />ganham forma.</h1>
+      <h1 id="works-title">Ideias que<br />ganham <em>forma.</em></h1>
       <div class="page-intro-copy">
         <p class="eyebrow">{works.length} trabalhos publicados</p>
         <p>Projetos construídos entre estratégia, conteúdo e imagem — da primeira intenção à forma final.</p>
@@ -111,6 +111,7 @@ const coverSizes: CoverSize[] = works.map((_, index) => {
 <style>
   .page-intro { display:grid; grid-template-columns:1.25fr .75fr; gap:40px; align-items:end; padding:clamp(62px,10vw,160px) clamp(18px,3.5vw,64px) clamp(52px,7vw,100px); }
   .page-intro h1 { margin:0; font-size:clamp(58px,10vw,160px); font-weight:500; line-height:.82; letter-spacing:-.08em; }
+  .page-intro h1 em { color:var(--accent); font-style:normal; }
   .page-intro-copy { max-width:430px; justify-self:end; }
   .page-intro-copy p:last-child { margin:0; font-size:clamp(14px,1.2vw,18px); line-height:1.55; }
   .filters { display:flex; gap:10px; padding:0 clamp(18px,3.5vw,64px) clamp(55px,7vw,100px); }
