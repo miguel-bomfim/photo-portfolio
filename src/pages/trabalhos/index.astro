@@ -69,15 +69,36 @@ const coverSizes: CoverSize[] = works.map((_, index) => {
   const buttons = [...document.querySelectorAll<HTMLButtonElement>("[data-filter]")];
   const cards = [...document.querySelectorAll<HTMLElement>("[data-category]")];
   const empty = document.querySelector<HTMLElement>("[data-empty-filter]");
+  const sizeClasses = ["work-card--short", "work-card--medium", "work-card--tall"];
+
+  const applyCascade = (visibleCards: HTMLElement[]) => {
+    const totalRows = Math.ceil(visibleCards.length / 3);
+    const descending = ["work-card--tall", "work-card--medium", "work-card--short"];
+    const ascending = ["work-card--short", "work-card--medium", "work-card--tall"];
+
+    visibleCards.forEach((card, index) => {
+      const rowIndex = Math.floor(index / 3);
+      const columnIndex = index % 3;
+      const isLastRow = rowIndex === totalRows - 1;
+      const sizeClass = isLastRow
+        ? "work-card--medium"
+        : (rowIndex % 2 === 0 ? descending : ascending)[columnIndex];
+
+      card.classList.remove(...sizeClasses);
+      card.classList.add(sizeClass);
+    });
+  };
+
   const applyFilter = (filter: string) => {
-    let visible = 0;
+    const visibleCards: HTMLElement[] = [];
     cards.forEach((card) => {
       const show = filter === "todos" || card.dataset.category === filter;
       card.hidden = !show;
-      if (show) visible += 1;
+      if (show) visibleCards.push(card);
     });
+    applyCascade(visibleCards);
     buttons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.filter === filter)));
-    if (empty) empty.hidden = visible > 0;
+    if (empty) empty.hidden = visibleCards.length > 0;
     const url = new URL(window.location.href);
     filter === "todos" ? url.searchParams.delete("filtro") : url.searchParams.set("filtro", filter);
     history.replaceState(null, "", url);
