@@ -43,7 +43,12 @@ const { title, description, active = "home" } = Astro.props;
   <body>
     <CustomCursor />
 
-    <header class="site-header">
+    <header
+      class:list={{
+        "site-header": true,
+        "site-header--overlay": active === "home",
+      }}
+    >
       <a class="brand" href="/" aria-label="Sarah, página inicial">
         Sarah Heloísa
       </a>
@@ -105,6 +110,15 @@ const { title, description, active = "home" } = Astro.props;
         localStorage.setItem("sarah-theme", next);
         setThemeColor();
       });
+
+      const overlayHeader = document.querySelector(".site-header--overlay");
+      if (overlayHeader) {
+        const syncHeader = () => {
+          overlayHeader.classList.toggle("is-scrolled", window.scrollY > 80);
+        };
+        syncHeader();
+        window.addEventListener("scroll", syncHeader, { passive: true });
+      }
     </script>
   </body>
 </html>
@@ -122,6 +136,49 @@ const { title, description, active = "home" } = Astro.props;
     background: var(--panel);
     border-bottom: 1px solid transparent;
     backdrop-filter: blur(14px);
+  }
+
+  .site-header--overlay {
+    position: fixed;
+    right: 0;
+    left: 0;
+    background: transparent;
+    backdrop-filter: none;
+    transition:
+      background-color 280ms ease,
+      border-color 280ms ease,
+      box-shadow 280ms ease,
+      backdrop-filter 280ms ease;
+  }
+
+  .site-header--overlay:not(.is-scrolled) {
+    border-bottom-color: transparent;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .site-header--overlay.is-scrolled {
+    border-bottom-color: var(--line);
+    background: color-mix(in srgb, var(--paper) 91%, transparent);
+    box-shadow: 0 10px 35px rgba(23, 23, 20, .06);
+    backdrop-filter: blur(16px) saturate(120%);
+  }
+
+  .site-header--overlay:not(.is-scrolled) .brand,
+  .site-header--overlay:not(.is-scrolled) .nav a,
+  .site-header--overlay:not(.is-scrolled) .nav button,
+  .site-header--overlay:not(.is-scrolled) .nav .is-active {
+    color: #171714;
+  }
+
+  .site-header--overlay:not(.is-scrolled) .nav .contact-link {
+    border-color: #171714;
+  }
+
+  .site-header--overlay:not(.is-scrolled) .theme-toggle {
+    border-color: rgba(23, 23, 20, .28) !important;
   }
 
   .brand {
