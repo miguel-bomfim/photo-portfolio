@@ -46,7 +46,6 @@ const { title, description, active = "home" } = Astro.props;
     <header class="site-header">
       <a class="brand" href="/" aria-label="Sarah, página inicial">
         Sarah Heloísa
-        <small>Publicitária · Fotógrafa</small>
       </a>
 
       <nav class="nav" aria-label="Navegação principal">
@@ -54,21 +53,28 @@ const { title, description, active = "home" } = Astro.props;
           class:list={{ "desktop-link": true, "is-active": active === "home" }}
           href="/">Início</a
         >
-        <a class:list={{ "is-active": active === "works" }} href="/trabalhos"
+        <a class:list={{ "primary-nav-link": true, "is-active": active === "works" }} href="/trabalhos"
           >Trabalhos</a
         >
-        <a class:list={{ "is-active": active === "about" }} href="/sobre"
+        <a class:list={{ "primary-nav-link": true, "is-active": active === "about" }} href="/sobre"
           >Sobre</a
         >
-        <a class:list={{ "is-active": active === "blog" }} href="/blog"
-          >Blog</a
-        >
+        <a class:list={{ "primary-nav-link": true, "is-active": active === "blog" }} href="/blog">Blog</a>
         <a
           class:list={{
             "is-active": active === "contact",
+            "contact-link": true,
           }}
-          href="/contato">Contato</a
+          href="/contato">Falar comigo</a
         >
+        <details class="mobile-menu">
+          <summary aria-label="Abrir menu">Menu</summary>
+          <div>
+            <a class:list={{ "is-active": active === "works" }} href="/trabalhos">Trabalhos</a>
+            <a class:list={{ "is-active": active === "about" }} href="/sobre">Sobre</a>
+            <a class:list={{ "is-active": active === "blog" }} href="/blog">Blog</a>
+          </div>
+        </details>
         <button class="theme-toggle" type="button" aria-label="Alternar tema">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
@@ -194,6 +200,24 @@ const { title, description, active = "home" } = Astro.props;
     color: var(--ink);
   }
 
+  .nav .contact-link {
+    padding: 11px 15px;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    color: var(--ink);
+    transition: background 200ms ease, color 200ms ease;
+  }
+
+  .nav .contact-link::after {
+    display: none;
+  }
+
+  .nav .contact-link:hover,
+  .nav .contact-link.is-active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
   .theme-toggle {
     display: grid;
     width: 32px;
@@ -201,6 +225,10 @@ const { title, description, active = "home" } = Astro.props;
     place-items: center;
     border: 1px solid var(--line) !important;
     border-radius: 50%;
+  }
+
+  .mobile-menu {
+    display: none;
   }
 
   .theme-toggle::after {
@@ -226,6 +254,49 @@ const { title, description, active = "home" } = Astro.props;
 
     .nav {
       gap: 6px;
+    }
+
+    .nav .primary-nav-link {
+      display: none;
+    }
+
+    .nav .contact-link {
+      padding: 9px 11px;
+    }
+
+    .mobile-menu {
+      position: relative;
+      display: block;
+    }
+
+    .mobile-menu summary {
+      padding: 9px 2px;
+      color: var(--muted);
+      cursor: pointer;
+      font: 500 10px/1 "DM Mono", monospace;
+      list-style: none;
+      text-transform: uppercase;
+    }
+
+    .mobile-menu summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .mobile-menu > div {
+      position: absolute;
+      z-index: 3;
+      top: calc(100% + 14px);
+      right: 0;
+      display: grid;
+      min-width: 160px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, .12);
+    }
+
+    .mobile-menu > div a {
+      padding: 13px 10px;
     }
   }
 </style>

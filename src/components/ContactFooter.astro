@@ -4,32 +4,46 @@ import { contactInfo } from "../lib/contact";
 interface Props {
   name?: string;
   instagramHref?: string;
+  email?: string;
+  whatsappHref?: string;
 }
 
 const {
   name = "Sarah Heloísa",
   instagramHref = contactInfo.instagramUrl,
+  email = contactInfo.email,
+  whatsappHref = contactInfo.whatsappUrl,
 } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
 <footer class="footer" id="contato">
-  <div>
-    <p class="eyebrow">Vamos criar algo juntos</p>
-    <a class="footer-email" href="/contato">Diga olá ↗</a>
+  <div class="footer-main">
+    <p class="eyebrow">Tem uma ideia em mente?</p>
+    <h2>Vamos dar<br /><em>forma.</em></h2>
+    <div class="footer-actions">
+      <a class="footer-primary" href="/contato">Falar comigo ↗</a>
+      {whatsappHref && <a href={whatsappHref} target="_blank" rel="noreferrer">WhatsApp ↗</a>}
+    </div>
   </div>
   <div class="footer-meta">
-    <a href={instagramHref} target="_blank" rel="noreferrer">Instagram ↗</a><br />
-    © {year} {name}
+    <div class="footer-links">
+      {email && email !== "email@gmail.com" && <a href={`mailto:${email}`}>E-mail ↗</a>}
+      <a href={instagramHref} target="_blank" rel="noreferrer">Instagram ↗</a>
+      {contactInfo.linkedinUrl && <a href={contactInfo.linkedinUrl} target="_blank" rel="noreferrer">LinkedIn ↗</a>}
+      {contactInfo.behanceUrl && <a href={contactInfo.behanceUrl} target="_blank" rel="noreferrer">Behance ↗</a>}
+    </div>
+    <span>© {year} {name}</span>
   </div>
 </footer>
 
 <style>
   .footer {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 70px;
     align-items: end;
-    min-height: 50vh;
+    min-height: 64vh;
     padding: clamp(70px, 8vw, 130px) clamp(20px, 5vw, 90px) 38px;
     background: var(--ink);
     color: var(--paper);
@@ -39,29 +53,67 @@ const year = new Date().getFullYear();
     text-decoration: none;
   }
 
-  .footer-email {
+  .footer h2 {
+    margin: clamp(45px, 7vw, 100px) 0;
+    font-size: clamp(58px, 9vw, 142px);
+    font-weight: 500;
+    line-height: .82;
+    letter-spacing: -.08em;
+  }
+
+  .footer h2 em {
+    color: var(--accent);
+    font-style: normal;
+  }
+
+  .footer-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .footer-actions a {
+    padding: 13px 17px;
+    border: 1px solid color-mix(in srgb, var(--paper), transparent 70%);
+    border-radius: 999px;
+    font: 400 10px/1 "DM Mono", monospace;
+    text-transform: uppercase;
+  }
+
+  .footer-actions .footer-primary {
     display: inline-block;
-    border-bottom: 0.06em solid var(--accent);
-    font-size: clamp(34px, 6.6vw, 106px);
-    line-height: 0.95;
-    letter-spacing: -0.065em;
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #171714;
   }
 
   .footer-meta {
+    display: flex;
+    min-width: 130px;
+    min-height: 170px;
+    flex-direction: column;
+    justify-content: space-between;
     color: var(--muted);
     font: 400 9px/1.5 "DM Mono", monospace;
     text-align: right;
     text-transform: uppercase;
   }
 
+  .footer-links {
+    display: grid;
+    gap: 10px;
+  }
+
   @media (max-width: 760px) {
     .footer {
       display: block;
-      min-height: 55vh;
+      min-height: 64vh;
     }
 
     .footer-meta {
-      margin-top: 110px;
+      min-height: 125px;
+      margin-top: 90px;
       text-align: left;
     }
   }

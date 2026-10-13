@@ -27,28 +27,30 @@ const heroLead =
   <main>
     <section class="about-hero" aria-labelledby="about-title">
       <div class="about-hero-copy">
-        <p class="eyebrow">Sobre a profissional</p>
+        <p class="eyebrow"></p>
         <h1 id="about-title">Ideias com<br /><em>direção.</em></h1>
         <p class="about-lead">{heroLead}</p>
       </div>
 
-      {portrait && (
-        <figure class="about-portrait" data-cursor-photo>
-          <img
-            src={portrait.url}
-            alt={`Retrato de ${about?.name || "Sarah Heloísa"}`}
-            width={portrait.width || 900}
-            height={portrait.height || 1200}
-            loading="eager"
-            fetchpriority="high"
-            decoding="async"
-          />
-          <figcaption>
-            <span>{about?.name || "Sarah Heloísa"}</span>
-            <span>Publicitária · Fotógrafa</span>
-          </figcaption>
-        </figure>
-      )}
+      {
+        portrait && (
+          <figure class="about-portrait" data-cursor-photo>
+            <img
+              src={portrait.url}
+              alt={`Retrato de ${about?.name || "Sarah Heloísa"}`}
+              width={portrait.width || 900}
+              height={portrait.height || 1200}
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+            />
+            <figcaption>
+              <span>{about?.name || "Sarah Heloísa"}</span>
+              <span>Publicitária · Fotógrafa</span>
+            </figcaption>
+          </figure>
+        )
+      }
     </section>
 
     <section class="about-story" aria-labelledby="story-title">
@@ -80,11 +82,17 @@ const heroLead =
       </div>
       <div>
         <p class="fact-label">Atuação</p>
-        <p>{about?.roles?.join(" · ") || "Publicidade · Social media"}<br />Fotografia</p>
+        <p>
+          {about?.roles?.join(" · ") || "Publicidade · Social media"}<br
+          />Fotografia
+        </p>
       </div>
       <div>
         <p class="fact-label">Portfólio</p>
-        <p>{content.portfolios.length + content.professionalProjects.length} trabalhos publicados<br /><a href="/trabalhos">Conhecer trabalhos ↗</a></p>
+        <p>
+          {content.portfolios.length + content.professionalProjects.length} trabalhos
+          publicados<br /><a href="/trabalhos">Conhecer trabalhos ↗</a>
+        </p>
       </div>
     </section>
   </main>
@@ -143,7 +151,9 @@ const heroLead =
     height: 100%;
     object-fit: cover;
     filter: grayscale(0.8);
-    transition: filter 600ms ease, transform 900ms cubic-bezier(0.2, 0.75, 0.25, 1);
+    transition:
+      filter 600ms ease,
+      transform 900ms cubic-bezier(0.2, 0.75, 0.25, 1);
   }
 
   .about-portrait:hover img {
@@ -162,7 +172,9 @@ const heroLead =
     padding: 48px 18px 16px;
     background: linear-gradient(transparent, rgba(0, 0, 0, 0.64));
     color: #fff;
-    font: 400 9px/1.3 "DM Mono", monospace;
+    font:
+      400 9px/1.3 "DM Mono",
+      monospace;
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
@@ -177,7 +189,9 @@ const heroLead =
   .story-index span,
   .fact-label {
     color: var(--muted);
-    font: 400 9px/1.4 "DM Mono", monospace;
+    font:
+      400 9px/1.4 "DM Mono",
+      monospace;
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
