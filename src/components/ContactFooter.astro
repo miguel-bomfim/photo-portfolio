@@ -5,14 +5,12 @@ interface Props {
   name?: string;
   instagramHref?: string;
   email?: string;
-  whatsappHref?: string;
 }
 
 const {
   name = "Sarah Heloísa",
   instagramHref = contactInfo.instagramUrl,
   email = contactInfo.email,
-  whatsappHref = contactInfo.whatsappUrl,
 } = Astro.props;
 const year = new Date().getFullYear();
 ---
@@ -21,17 +19,15 @@ const year = new Date().getFullYear();
   <div class="footer-main">
     <p class="eyebrow">Tem uma ideia em mente?</p>
     <h2>Vamos dar<br /><em>forma.</em></h2>
-    <div class="footer-actions">
-      <a class="footer-primary" href="/contato">Falar comigo ↗</a>
-      {whatsappHref && <a href={whatsappHref} target="_blank" rel="noreferrer">WhatsApp ↗</a>}
-    </div>
   </div>
   <div class="footer-meta">
     <div class="footer-links">
-      {email && email !== "email@gmail.com" && <a href={`mailto:${email}`}>E-mail ↗</a>}
-      <a href={instagramHref} target="_blank" rel="noreferrer">Instagram ↗</a>
-      {contactInfo.linkedinUrl && <a href={contactInfo.linkedinUrl} target="_blank" rel="noreferrer">LinkedIn ↗</a>}
-      {contactInfo.behanceUrl && <a href={contactInfo.behanceUrl} target="_blank" rel="noreferrer">Behance ↗</a>}
+      {email && email !== "email@gmail.com" && (
+        <a href={`mailto:${email}`}><span>E-mail</span><span aria-hidden="true">↗</span></a>
+      )}
+      <a href={instagramHref} target="_blank" rel="noreferrer">
+        <span>Instagram</span><span aria-hidden="true">↗</span>
+      </a>
     </div>
     <span>© {year} {name}</span>
   </div>
@@ -66,43 +62,43 @@ const year = new Date().getFullYear();
     font-style: normal;
   }
 
-  .footer-actions {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .footer-actions a {
-    padding: 13px 17px;
-    border: 1px solid color-mix(in srgb, var(--paper), transparent 70%);
-    border-radius: 999px;
-    font: 400 10px/1 "DM Mono", monospace;
-    text-transform: uppercase;
-  }
-
-  .footer-actions .footer-primary {
-    display: inline-block;
-    border-color: var(--accent);
-    background: var(--accent);
-    color: #171714;
-  }
-
   .footer-meta {
     display: flex;
-    min-width: 130px;
+    min-width: clamp(230px, 17vw, 320px);
     min-height: 170px;
     flex-direction: column;
     justify-content: space-between;
     color: var(--muted);
-    font: 400 9px/1.5 "DM Mono", monospace;
+    font: 400 10px/1.5 "DM Mono", monospace;
     text-align: right;
     text-transform: uppercase;
   }
 
   .footer-links {
     display: grid;
-    gap: 10px;
+    gap: 12px;
+  }
+
+  .footer-links a {
+    display: flex;
+    min-height: 58px;
+    padding: 0 20px;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid color-mix(in srgb, var(--paper) 34%, transparent);
+    border-radius: 999px;
+    color: var(--paper);
+    font-size: clamp(14px, 1.05vw, 19px);
+    letter-spacing: -.02em;
+    transition: border-color 220ms ease, background 220ms ease, color 220ms ease, transform 220ms ease;
+  }
+
+  .footer-links a:hover,
+  .footer-links a:focus-visible {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #171714;
+    transform: translateY(-2px);
   }
 
   @media (max-width: 760px) {
@@ -115,6 +111,10 @@ const year = new Date().getFullYear();
       min-height: 125px;
       margin-top: 90px;
       text-align: left;
+    }
+
+    .footer-links a {
+      width: min(100%, 340px);
     }
   }
 </style>

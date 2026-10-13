@@ -1,11 +1,12 @@
 ---
 import CustomCursor from "../components/CustomCursor.astro";
+import ContactFooter from "../components/ContactFooter.astro";
 import "../styles/global.css";
 
 interface Props {
   title: string;
   description: string;
-  active?: "home" | "works" | "about" | "blog" | "contact";
+  active?: "home" | "works" | "about" | "blog";
 }
 
 const { title, description, active = "home" } = Astro.props;
@@ -66,11 +67,8 @@ const { title, description, active = "home" } = Astro.props;
         >
         <a class:list={{ "primary-nav-link": true, "is-active": active === "blog" }} href="/blog">Blog</a>
         <a
-          class:list={{
-            "is-active": active === "contact",
-            "contact-link": true,
-          }}
-          href="/contato">Falar comigo</a
+          class="contact-link"
+          href="#contato">Falar comigo</a
         >
         <details class="mobile-menu">
           <summary aria-label="Abrir menu">Menu</summary>
@@ -91,6 +89,7 @@ const { title, description, active = "home" } = Astro.props;
     </header>
 
     <slot />
+    <ContactFooter />
 
     <script is:inline>
       const setThemeColor = () => {

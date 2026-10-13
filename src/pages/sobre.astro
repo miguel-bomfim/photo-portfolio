@@ -1,5 +1,4 @@
 ---
-import ContactFooter from "../components/ContactFooter.astro";
 import SiteLayout from "../layouts/SiteLayout.astro";
 import { getSiteData } from "../lib/hygraph";
 
@@ -95,8 +94,6 @@ const heroLead =
       </div>
     </section>
   </main>
-
-  <ContactFooter name={about?.name || "Sarah Heloísa"} />
 </SiteLayout>
 
 <style>

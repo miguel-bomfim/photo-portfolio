@@ -13,8 +13,8 @@
   z-index: 1;
   inset: 0;
   background:
-    linear-gradient(90deg, rgb(247, 246, 241) 0%, rgba(247, 246, 241, .82) 32%, rgba(247, 246, 241, 0.514) 68%, rgba(247, 246, 241, .04) 100%),
-    linear-gradient(0deg, rgba(247, 246, 241, .5) 0%, rgba(247, 246, 241, 0) 44%);
+    linear-gradient(90deg, rgba(247, 246, 241, .78) 0%, rgba(247, 246, 241, .58) 32%, rgba(247, 246, 241, .2) 68%, rgba(247, 246, 241, .02) 100%),
+    linear-gradient(0deg, rgba(247, 246, 241, .3) 0%, rgba(247, 246, 241, 0) 44%);
   content: "";
   pointer-events: none;
 }
@@ -28,6 +28,7 @@
   padding: clamp(56px, 6vw, 96px) clamp(28px, 4.5vw, 86px);
   flex-direction: column;
   justify-content: center;
+  transform: translateY(clamp(32px, 5vh, 58px));
 }
 
 .hero h1 {
@@ -460,6 +461,7 @@
     min-height: 100svh;
     padding: 110px 24px 48px;
     justify-content: flex-end;
+    transform: none;
   }
   .hero h1 { margin: 0 0 26px; font-size: clamp(53px, 16.5vw, 78px); }
   .hero-lead { width: 100%; max-width: 520px; }

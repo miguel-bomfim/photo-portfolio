@@ -1,15 +1,12 @@
 ---
 import CmsImage from "../components/CmsImage.astro";
-import ContactFooter from "../components/ContactFooter.astro";
 import SiteLayout from "../layouts/SiteLayout.astro";
-import { contactInfo } from "../lib/contact";
 import { getSiteData } from "../lib/hygraph";
 import "../styles/pages/home.css";
 
 const content = await getSiteData();
 const home = content.homePages[0];
 const about = content.aboutMes[0];
-const settings = content.siteSettings;
 
 const recentPosts = content.blogs.slice(0, 3);
 const featuredCase = content.professionalProjects.find(
@@ -40,9 +37,7 @@ const photographyAsset =
   heroAsset;
 const aboutText =
   about?.shortBio ||
-  "Publicitária e fotógrafa. Sarah une estratégia e sensibilidade para transformar ideias em narrativas que encontram as pessoas.";
-const contactEmail = settings?.email || contactInfo.email;
-const instagramHref = settings?.instagramUrl || contactInfo.instagramUrl;
+  "Publicitária e fotógrafa. Estratégia e sensibilidade para transformar ideias em narrativas que encontram as pessoas.";
 ---
 
 <SiteLayout
@@ -74,7 +69,7 @@ const instagramHref = settings?.instagramUrl || contactInfo.instagramUrl;
         </h1>
         <div class="hero-actions">
           <a class="button button--primary" href="/trabalhos">Ver trabalhos</a>
-          <a class="button" href="/contato">Falar comigo</a>
+          <a class="button" href="#contato">Falar comigo</a>
         </div>
       </div>
     </section>
@@ -262,11 +257,4 @@ const instagramHref = settings?.instagramUrl || contactInfo.instagramUrl;
       )
     }
   </main>
-
-  <ContactFooter
-    name={about?.name || home?.title || "Sarah Heloísa"}
-    instagramHref={instagramHref}
-    email={contactEmail}
-    whatsappHref={contactInfo.whatsappUrl}
-  />
 </SiteLayout>
