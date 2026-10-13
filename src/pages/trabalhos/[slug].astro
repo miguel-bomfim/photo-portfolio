@@ -92,10 +92,38 @@ const caseSections = project ? [
 
 <style>
   .project-head { display:grid; grid-template-columns:1.2fr .8fr; gap:40px; align-items:end; min-height:54vh; padding:clamp(55px,9vw,140px) clamp(18px,3.5vw,64px) clamp(50px,7vw,100px); }
+  .project-head > div:first-child { position:relative; z-index:2; }
   .project-head h1 { margin:0; font-size:clamp(58px,10vw,155px); font-weight:500; line-height:.84; letter-spacing:-.08em; }
   .project-description { max-width:540px; justify-self:end; }
   .project-description p:last-child { margin:0; white-space:pre-line; font-size:clamp(14px,1.15vw,17px); line-height:1.6; }
-  .back-link { display:inline-block; margin-bottom:24px; color:var(--muted); font:400 10px/1 "DM Mono",monospace; text-decoration:none; text-transform:uppercase; }
+  .back-link {
+    position:relative;
+    z-index:3;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:190px;
+    min-height:48px;
+    margin-bottom:clamp(28px,3vw,46px);
+    padding:0 20px;
+    border:1px solid var(--ink);
+    border-radius:999px;
+    color:var(--ink);
+    background:transparent;
+    font:500 clamp(10px,.75vw,12px)/1 "DM Mono",monospace;
+    text-decoration:none;
+    text-transform:uppercase;
+    cursor:pointer;
+    pointer-events:auto;
+    transition:background-color .25s ease,color .25s ease,transform .25s ease;
+  }
+  .back-link:hover,
+  .back-link:focus-visible {
+    background:var(--ink);
+    color:var(--paper);
+    transform:translateY(-2px);
+  }
+  .back-link:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
   .case-cover { margin:0 var(--gutter); height:min(82vh,980px); overflow:hidden; background:#c9c8c2; }
   .case-cover img { width:100%; height:100%; object-fit:cover; }
   .case-facts { display:grid; grid-template-columns:repeat(3,1fr); border-bottom:1px solid var(--line); }

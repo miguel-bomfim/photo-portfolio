@@ -28,8 +28,8 @@ const formatDate = (date?: string | null) =>
       <h1 id="blog-title">Ideias também<br />pedem <em>espaço.</em></h1>
     </div>
     <p>
-      Reflexões sobre comunicação, bastidores de projetos e tudo aquilo que
-      ajuda uma ideia a encontrar sua melhor forma.
+      Reflexões sobre comunicação e tudo aquilo que ajuda uma ideia a encontrar
+      sua melhor forma.
     </p>
   </section>
 
@@ -169,8 +169,10 @@ const formatDate = (date?: string | null) =>
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 22px var(--gutter);
+    padding: 22px clamp(18px, 3.5vw, 64px);
+    border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--accent) 8%, var(--paper));
   }
   .archive-head p {
     margin: 0;
@@ -185,15 +187,28 @@ const formatDate = (date?: string | null) =>
   .post-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(75px, 8vw, 130px) var(--gutter);
-    padding: var(--gutter) var(--gutter) clamp(100px, 12vw, 180px);
+    gap: clamp(18px, 2vw, 34px) var(--gutter);
+    padding: clamp(28px, 4vw, 64px) clamp(18px, 3.5vw, 64px) clamp(100px, 12vw, 180px);
+    background: color-mix(in srgb, var(--accent) 8%, var(--paper));
   }
   .post-card {
     min-width: 0;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    transition: border-color 250ms ease, box-shadow 250ms ease, transform 250ms ease;
+  }
+  .post-card:hover,
+  .post-card:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 24px 60px color-mix(in srgb, var(--ink) 12%, transparent);
+    transform: translateY(-6px);
   }
   .post-card a {
-    display: block;
+    display: flex;
+    height: 100%;
+    padding: 12px 12px 26px;
     color: inherit;
+    flex-direction: column;
     text-decoration: none;
   }
   .post-cover {
@@ -231,8 +246,8 @@ const formatDate = (date?: string | null) =>
     display: flex;
     gap: 16px;
     justify-content: space-between;
-    padding: 14px 0;
-    border-top: 1px solid var(--line);
+    margin: 0 10px;
+    padding: 18px 0 10px;
     color: var(--muted);
     font:
       400 8px/1.4 "DM Mono",
@@ -243,7 +258,7 @@ const formatDate = (date?: string | null) =>
     text-align: right;
   }
   .post-card h2 {
-    margin: 17px 0 13px;
+    margin: 10px 10px 13px;
     overflow-wrap: anywhere;
     font-size: clamp(28px, 2.6vw, 44px);
     font-weight: 500;
@@ -252,7 +267,7 @@ const formatDate = (date?: string | null) =>
   }
   .post-card p {
     display: -webkit-box;
-    margin: 0;
+    margin: 0 10px;
     overflow: hidden;
     font-size: 14px;
     line-height: 1.6;
@@ -261,7 +276,8 @@ const formatDate = (date?: string | null) =>
   }
   .read-link {
     display: inline-block;
-    margin-top: 22px;
+    margin: auto 10px 4px;
+    padding-top: 22px;
     font:
       400 9px/1 "DM Mono",
       monospace;
@@ -271,8 +287,9 @@ const formatDate = (date?: string | null) =>
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    padding: 28px var(--gutter);
+    padding: 28px clamp(18px, 3.5vw, 64px);
     border-top: 1px solid var(--line);
+    background: color-mix(in srgb, var(--accent) 8%, var(--paper));
   }
   .pagination > a {
     color: inherit;
@@ -352,7 +369,9 @@ const formatDate = (date?: string | null) =>
     }
     .post-grid {
       grid-template-columns: 1fr;
-      gap: 75px;
+      gap: 28px;
+      padding-right: 18px;
+      padding-left: 18px;
     }
     .post-cover {
       aspect-ratio: 5/4;

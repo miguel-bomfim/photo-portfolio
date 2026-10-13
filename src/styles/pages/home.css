@@ -417,7 +417,23 @@
   line-height: 1.55;
 }
 
-.journal { border-top: 1px solid var(--line); }
+.journal {
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--accent) 8%, var(--paper));
+}
+
+.journal .section-heading > a {
+  padding: 12px 16px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.journal .section-heading > a:hover,
+.journal .section-heading > a:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+}
 
 .journal-grid {
   display: grid;
@@ -425,20 +441,38 @@
   gap: var(--gutter);
 }
 
-.post-card { text-decoration: none; }
-.post-cover { aspect-ratio: 4 / 3; margin-bottom: 18px; overflow: hidden; background: #c9c8c2; }
+.post-card {
+  display: flex;
+  min-height: 100%;
+  padding: 12px 12px 26px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  flex-direction: column;
+  text-decoration: none;
+  transition: border-color 250ms ease, box-shadow 250ms ease, transform 250ms ease;
+}
+
+.post-card:hover,
+.post-card:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--ink) 12%, transparent);
+  transform: translateY(-6px);
+}
+
+.post-cover { aspect-ratio: 4 / 3; margin-bottom: 0; overflow: hidden; background: #c9c8c2; }
 .post-cover img { filter: grayscale(.9); transition: filter 400ms ease, transform 600ms ease; }
 .post-card:hover .post-cover img { filter: grayscale(0); transform: scale(1.025); }
 
 .post-card h3 {
-  margin: 9px 0;
+  margin: 10px 10px;
   font-size: clamp(23px, 2.2vw, 35px);
   font-weight: 500;
   line-height: 1.08;
   letter-spacing: -.05em;
 }
 
-.post-card p { max-width: 440px; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.55; }
+.post-card > span { margin: 20px 10px 0; }
+.post-card p { max-width: 440px; margin: 0 10px 8px; color: var(--muted); font-size: 14px; line-height: 1.55; }
 
 @media (max-width: 980px) {
   .hero-copy { width: min(840px, 88vw); }
@@ -502,7 +536,7 @@
   .service-list article + article { min-height: 255px; padding: 25px 0 35px; border-right: 0; border-bottom: 1px solid var(--line); }
   .service-list h3 { margin-top: 65px; }
 
-  .journal-grid { grid-template-columns: 1fr; gap: 55px; }
+  .journal-grid { grid-template-columns: 1fr; gap: 28px; }
 }
 
 :root[data-theme="dark"] .hero {
