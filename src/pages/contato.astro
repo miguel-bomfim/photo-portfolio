@@ -30,10 +30,8 @@ const contact = {
           Conte um pouco sobre a sua ideia, marca ou história. Responderei com
           calma para entender o contexto e pensar no melhor caminho.
         </p>
-        <span>Publicidade · Social media · Fotografia</span>
+        <span>Publicidade · Fotografia</span>
       </div>
-
-      <div class="contact-at" aria-hidden="true">@</div>
     </section>
 
     <section class="contact-channels" aria-label="Canais de contato">
@@ -54,21 +52,6 @@ const contact = {
         <strong>{contact.instagramLabel}</strong>
         <span class="channel-arrow" aria-hidden="true">↗</span>
       </a>
-    </section>
-
-    <section class="contact-details" aria-label="Informações de atendimento">
-      <div>
-        <p class="detail-label">Base</p>
-        <p>{contact.location}<br />Disponível para novos projetos</p>
-      </div>
-      <div>
-        <p class="detail-label">Retorno</p>
-        <p>{contact.responseTime}<br />De segunda a sexta</p>
-      </div>
-      <div>
-        <p class="detail-label">Instagram</p>
-        <p>Bastidores e trabalhos recentes</p>
-      </div>
     </section>
 
     <section class="contact-closing" data-cursor-inverse>
@@ -137,19 +120,6 @@ const contact = {
       monospace;
     letter-spacing: 0.09em;
     text-transform: uppercase;
-  }
-
-  .contact-at {
-    position: absolute;
-    top: 0;
-    right: -0.07em;
-    color: var(--accent);
-    font-size: min(58vw, 880px);
-    font-weight: 600;
-    line-height: 0.8;
-    letter-spacing: -0.14em;
-    opacity: 0.08;
-    pointer-events: none;
   }
 
   .contact-channels {
@@ -277,11 +247,6 @@ const contact = {
 
     .contact-note p {
       width: 84%;
-    }
-
-    .contact-at {
-      top: 22%;
-      font-size: 92vw;
     }
 
     .channel {

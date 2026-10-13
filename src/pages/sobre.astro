@@ -16,7 +16,7 @@ const biographyParagraphs = biography
   .filter(Boolean);
 const heroLead =
   about?.shortBio ||
-  "Publicitária, social media e fotógrafa. Uno estratégia e sensibilidade para transformar ideias em narrativas que encontram as pessoas.";
+  "Publicitária e fotógrafa. Uno estratégia e sensibilidade para transformar ideias em narrativas que encontram as pessoas.";
 ---
 
 <SiteLayout
@@ -27,7 +27,6 @@ const heroLead =
   <main>
     <section class="about-hero" aria-labelledby="about-title">
       <div class="about-hero-copy">
-        <p class="eyebrow"></p>
         <h1 id="about-title">Ideias com<br /><em>direção.</em></h1>
         <p class="about-lead">{heroLead}</p>
       </div>

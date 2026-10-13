@@ -1,5 +1,5 @@
 export const contactInfo = {
-  email: import.meta.env.PUBLIC_CONTACT_EMAIL || "email@gmail.com",
+  email: import.meta.env.PUBLIC_CONTACT_EMAIL || "sarahheloisa2010@gmail.com",
   instagramUrl:
     import.meta.env.PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/sarahheloisa",
   instagramLabel: import.meta.env.PUBLIC_INSTAGRAM_HANDLE || "Instagram",

@@ -40,7 +40,7 @@ const photographyAsset =
   heroAsset;
 const aboutText =
   about?.shortBio ||
-  "Publicitária, social media e fotógrafa. Sarah une estratégia e sensibilidade para transformar ideias em narrativas que encontram as pessoas.";
+  "Publicitária e fotógrafa. Sarah une estratégia e sensibilidade para transformar ideias em narrativas que encontram as pessoas.";
 const contactEmail = settings?.email || contactInfo.email;
 const instagramHref = settings?.instagramUrl || contactInfo.instagramUrl;
 ---
@@ -72,10 +72,6 @@ const instagramHref = settings?.instagramUrl || contactInfo.instagramUrl;
         <h1 id="hero-title">
           Estratégia e imagem para <em>marcas e pessoas.</em>
         </h1>
-        <p class="hero-lead">
-          Publicitária e fotógrafa em Santa Catarina. Ideias com direção,
-          conteúdo com intenção e imagens que criam presença.
-        </p>
         <div class="hero-actions">
           <a class="button button--primary" href="/trabalhos">Ver trabalhos</a>
           <a class="button" href="/contato">Falar comigo</a>
@@ -224,39 +220,11 @@ const instagramHref = settings?.instagramUrl || contactInfo.instagramUrl;
         )
       }
       <div class="about-preview-copy">
-        <p class="eyebrow">Quem cria</p>
         <h2 id="about-preview-title">
           Olhar atento,<br /><em>ideias com direção.</em>
         </h2>
         <p>{aboutText}</p>
         <a href="/sobre">Conhecer a Sarah ↗</a>
-      </div>
-    </section>
-
-    <section class="services" aria-labelledby="services-title">
-      <header class="services-heading">
-        <p class="eyebrow">Como posso ajudar</p>
-        <h2 id="services-title">
-          Serviços para comunicar com <em>clareza e presença.</em>
-        </h2>
-      </header>
-      <div class="service-list">
-        <article>
-          <span>Estratégia</span><h3>Planejamento de conteúdo</h3><p>
-            Direção, pautas e formatos alinhados à voz e aos objetivos da marca.
-          </p>
-        </article>
-        <article>
-          <span>Social media</span><h3>Conteúdo e presença digital</h3><p>
-            Construção de narrativas e peças para uma comunicação consistente.
-          </p>
-        </article>
-        <article>
-          <span>Fotografia</span><h3>Ensaios e coberturas</h3><p>
-            Retratos, eventos e histórias registrados com espontaneidade e
-            intenção.
-          </p>
-        </article>
       </div>
     </section>
 

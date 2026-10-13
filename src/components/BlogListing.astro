@@ -10,107 +10,362 @@ interface Props {
 }
 
 const { posts, currentPage, totalPages, totalPosts, startIndex } = Astro.props;
-const pageUrl = (page: number) => page === 1 ? "/blog" : `/blog/pagina/${page}`;
-const formatDate = (date?: string | null) => date
-  ? new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "long", year: "numeric" }).format(new Date(date))
-  : "Em breve";
+const pageUrl = (page: number) =>
+  page === 1 ? "/blog" : `/blog/pagina/${page}`;
+const formatDate = (date?: string | null) =>
+  date
+    ? new Intl.DateTimeFormat("pt-BR", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      }).format(new Date(date))
+    : "Em breve";
 ---
 
 <main>
   <section class="blog-intro" aria-labelledby="blog-title">
     <div>
-      <p class="eyebrow">Blog · Caderno de processo</p>
       <h1 id="blog-title">Ideias também<br />pedem <em>espaço.</em></h1>
     </div>
-    <p>Reflexões sobre comunicação, bastidores de projetos e tudo aquilo que ajuda uma ideia a encontrar sua melhor forma.</p>
+    <p>
+      Reflexões sobre comunicação, bastidores de projetos e tudo aquilo que
+      ajuda uma ideia a encontrar sua melhor forma.
+    </p>
   </section>
 
-  {posts.length > 0 ? (
-    <>
-      <div class="archive-head">
-        <p class="eyebrow">Arquivo</p>
-        <p>{String(startIndex + 1).padStart(2, "0")}—{String(startIndex + posts.length).padStart(2, "0")} de {String(totalPosts).padStart(2, "0")}</p>
-      </div>
+  {
+    posts.length > 0 ? (
+      <>
+        <div class="archive-head">
+          <p class="eyebrow">Arquivo</p>
+          <p>
+            {String(startIndex + 1).padStart(2, "0")}—
+            {String(startIndex + posts.length).padStart(2, "0")} de{" "}
+            {String(totalPosts).padStart(2, "0")}
+          </p>
+        </div>
 
-      <section class="post-grid" aria-label={`Publicações, página ${currentPage}`}>
-        {posts.map((post, index) => (
-          <article class="post-card">
-            <a href={`/blog/${post.slug}`}>
-              <div class="post-cover" data-cursor-photo>
-                {post.cover ? (
-                  <img src={post.cover.url} alt="" width={post.cover.width || 1200} height={post.cover.height || 900} loading={index < 3 ? "eager" : "lazy"} />
-                ) : (
-                  <span class="cover-placeholder" aria-hidden="true">{String(startIndex + index + 1).padStart(2, "0")}</span>
-                )}
-              </div>
-              <div class="post-meta"><span>{post.category || "Caderno"}</span><span>{formatDate(post.publishedAt)}</span></div>
-              <h2>{post.title}</h2>
-              <p>{post.excerpt}</p>
-              <span class="read-link">Continuar lendo ↗</span>
+        <section
+          class="post-grid"
+          aria-label={`Publicações, página ${currentPage}`}
+        >
+          {posts.map((post, index) => (
+            <article class="post-card">
+              <a href={`/blog/${post.slug}`}>
+                <div class="post-cover" data-cursor-photo>
+                  {post.cover ? (
+                    <img
+                      src={post.cover.url}
+                      alt=""
+                      width={post.cover.width || 1200}
+                      height={post.cover.height || 900}
+                      loading={index < 3 ? "eager" : "lazy"}
+                    />
+                  ) : (
+                    <span class="cover-placeholder" aria-hidden="true">
+                      {String(startIndex + index + 1).padStart(2, "0")}
+                    </span>
+                  )}
+                </div>
+                <div class="post-meta">
+                  <span>{post.category || "Caderno"}</span>
+                  <span>{formatDate(post.publishedAt)}</span>
+                </div>
+                <h2>{post.title}</h2>
+                <p>{post.excerpt}</p>
+                <span class="read-link">Continuar lendo ↗</span>
+              </a>
+            </article>
+          ))}
+        </section>
+
+        {totalPages > 1 && (
+          <nav class="pagination" aria-label="Paginação do blog">
+            <a
+              class:list={{ disabled: currentPage === 1 }}
+              href={currentPage === 1 ? undefined : pageUrl(currentPage - 1)}
+              aria-disabled={currentPage === 1}
+              tabindex={currentPage === 1 ? -1 : undefined}
+            >
+              ← Anterior
             </a>
-          </article>
-        ))}
+            <ol>
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+                (page) => (
+                  <li>
+                    <a
+                      class:list={{ active: page === currentPage }}
+                      href={pageUrl(page)}
+                      aria-current={page === currentPage ? "page" : undefined}
+                    >
+                      {String(page).padStart(2, "0")}
+                    </a>
+                  </li>
+                ),
+              )}
+            </ol>
+            <a
+              class:list={{ disabled: currentPage === totalPages }}
+              href={
+                currentPage === totalPages
+                  ? undefined
+                  : pageUrl(currentPage + 1)
+              }
+              aria-disabled={currentPage === totalPages}
+              tabindex={currentPage === totalPages ? -1 : undefined}
+            >
+              Próxima →
+            </a>
+          </nav>
+        )}
+      </>
+    ) : (
+      <section class="blog-empty" aria-label="Blog em preparação">
+        <p class="eyebrow">Primeiras notas em preparação</p>
+        <h2>
+          Este caderno
+          <br />
+          começa em breve.
+        </h2>
+        <p>
+          Novos textos sobre publicidade, processos criativos, social media e
+          fotografia serão publicados por aqui.
+        </p>
       </section>
-
-      {totalPages > 1 && (
-        <nav class="pagination" aria-label="Paginação do blog">
-          <a class:list={{ disabled: currentPage === 1 }} href={currentPage === 1 ? undefined : pageUrl(currentPage - 1)} aria-disabled={currentPage === 1} tabindex={currentPage === 1 ? -1 : undefined}>← Anterior</a>
-          <ol>
-            {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
-              <li><a class:list={{ active: page === currentPage }} href={pageUrl(page)} aria-current={page === currentPage ? "page" : undefined}>{String(page).padStart(2, "0")}</a></li>
-            ))}
-          </ol>
-          <a class:list={{ disabled: currentPage === totalPages }} href={currentPage === totalPages ? undefined : pageUrl(currentPage + 1)} aria-disabled={currentPage === totalPages} tabindex={currentPage === totalPages ? -1 : undefined}>Próxima →</a>
-        </nav>
-      )}
-    </>
-  ) : (
-    <section class="blog-empty" aria-label="Blog em preparação">
-      <p class="eyebrow">Primeiras notas em preparação</p>
-      <h2>Este caderno<br />começa em breve.</h2>
-      <p>Novos textos sobre publicidade, processos criativos, social media e fotografia serão publicados por aqui.</p>
-    </section>
-  )}
+    )
+  }
 </main>
 
 <style>
-  .blog-intro { display:grid; grid-template-columns:1.25fr .75fr; gap:50px; align-items:end; min-height:calc(78svh - 112px); padding:clamp(70px,10vw,160px) clamp(18px,3.5vw,64px); border-bottom:1px solid var(--line); }
-  .blog-intro h1 { margin:clamp(65px,8vw,130px) 0 0; font-size:clamp(60px,9.5vw,152px); font-weight:500; line-height:.83; letter-spacing:-.08em; }
-  .blog-intro em { color:var(--accent); font-style:normal; }
-  .blog-intro>p { max-width:470px; margin:0; justify-self:end; font-size:clamp(17px,1.55vw,24px); line-height:1.5; letter-spacing:-.035em; }
-  .archive-head { display:flex; justify-content:space-between; align-items:center; padding:22px var(--gutter); border-bottom:1px solid var(--line); }
-  .archive-head p { margin:0; }
-  .archive-head>p:last-child { color:var(--muted); font:400 9px/1 "DM Mono",monospace; text-transform:uppercase; }
-  .post-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(75px,8vw,130px) var(--gutter); padding:var(--gutter) var(--gutter) clamp(100px,12vw,180px); }
-  .post-card { min-width:0; }
-  .post-card a { display:block; color:inherit; text-decoration:none; }
-  .post-cover { position:relative; overflow:hidden; aspect-ratio:4/3; background:var(--line); }
-  .post-card img { display:block; width:100%; height:100%; object-fit:cover; filter:grayscale(.8); transition:filter 500ms ease,transform 700ms cubic-bezier(.2,.7,.2,1); }
-  .post-card:hover img { filter:none; transform:scale(1.025); }
-  .cover-placeholder { display:flex; height:100%; align-items:flex-end; justify-content:flex-end; padding:20px; color:var(--muted); font:400 clamp(50px,6vw,92px)/.8 "DM Mono",monospace; }
-  .post-meta { display:flex; gap:16px; justify-content:space-between; padding:14px 0; border-top:1px solid var(--line); color:var(--muted); font:400 8px/1.4 "DM Mono",monospace; text-transform:uppercase; }
-  .post-meta span:last-child { text-align:right; }
-  .post-card h2 { margin:17px 0 13px; overflow-wrap:anywhere; font-size:clamp(28px,2.6vw,44px); font-weight:500; line-height:.96; letter-spacing:-.06em; }
-  .post-card p { display:-webkit-box; margin:0; overflow:hidden; font-size:14px; line-height:1.6; -webkit-box-orient:vertical; -webkit-line-clamp:3; }
-  .read-link { display:inline-block; margin-top:22px; font:400 9px/1 "DM Mono",monospace; text-transform:uppercase; }
-  .pagination { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:28px var(--gutter); border-top:1px solid var(--line); }
-  .pagination>a { color:inherit; font:400 9px/1 "DM Mono",monospace; text-decoration:none; text-transform:uppercase; }
-  .pagination>a:last-child { justify-self:end; }
-  .pagination .disabled { opacity:.25; pointer-events:none; }
-  .pagination ol { display:flex; gap:8px; margin:0; padding:0; list-style:none; }
-  .pagination ol a { display:grid; width:34px; height:34px; place-items:center; border:1px solid transparent; color:var(--muted); font:400 9px/1 "DM Mono",monospace; text-decoration:none; }
-  .pagination ol a.active { border-color:var(--ink); color:var(--ink); }
-  .blog-empty { min-height:65vh; padding:clamp(90px,12vw,180px) clamp(18px,5vw,90px); background:var(--ink); color:var(--paper); }
-  .blog-empty h2 { margin:clamp(70px,10vw,150px) 0 45px; font-size:clamp(58px,9vw,140px); font-weight:500; line-height:.84; letter-spacing:-.08em; }
-  .blog-empty>p:last-child { max-width:520px; margin-left:auto; font-size:clamp(16px,1.4vw,22px); line-height:1.55; }
-  @media(max-width:1000px){ .post-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-  @media(max-width:760px){
-    .blog-intro { display:block; min-height:auto; padding-top:70px; }
-    .blog-intro h1 { margin:65px 0; font-size:clamp(55px,17vw,75px); }
-    .blog-intro>p { width:80%; margin-left:auto; }
-    .post-grid { grid-template-columns:1fr; gap:75px; }
-    .post-cover { aspect-ratio:5/4; }
-    .pagination { grid-template-columns:1fr 1fr; row-gap:24px; }
-    .pagination ol { grid-column:1/-1; grid-row:1; justify-content:center; flex-wrap:wrap; }
+  .blog-intro {
+    display: grid;
+    grid-template-columns: 1.25fr 0.75fr;
+    gap: 50px;
+    align-items: end;
+    min-height: calc(78svh - 112px);
+    padding: clamp(70px, 10vw, 160px) clamp(18px, 3.5vw, 64px);
+    border-bottom: 1px solid var(--line);
+  }
+  .blog-intro h1 {
+    margin: clamp(65px, 8vw, 130px) 0 0;
+    font-size: clamp(60px, 9.5vw, 152px);
+    font-weight: 500;
+    line-height: 0.83;
+    letter-spacing: -0.08em;
+  }
+  .blog-intro em {
+    color: var(--accent);
+    font-style: normal;
+  }
+  .blog-intro > p {
+    max-width: 470px;
+    margin: 0;
+    justify-self: end;
+    font-size: clamp(17px, 1.55vw, 24px);
+    line-height: 1.5;
+    letter-spacing: -0.035em;
+  }
+  .archive-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px var(--gutter);
+    border-bottom: 1px solid var(--line);
+  }
+  .archive-head p {
+    margin: 0;
+  }
+  .archive-head > p:last-child {
+    color: var(--muted);
+    font:
+      400 9px/1 "DM Mono",
+      monospace;
+    text-transform: uppercase;
+  }
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(75px, 8vw, 130px) var(--gutter);
+    padding: var(--gutter) var(--gutter) clamp(100px, 12vw, 180px);
+  }
+  .post-card {
+    min-width: 0;
+  }
+  .post-card a {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+  .post-cover {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    background: var(--line);
+  }
+  .post-card img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.8);
+    transition:
+      filter 500ms ease,
+      transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .post-card:hover img {
+    filter: none;
+    transform: scale(1.025);
+  }
+  .cover-placeholder {
+    display: flex;
+    height: 100%;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 20px;
+    color: var(--muted);
+    font:
+      400 clamp(50px, 6vw, 92px)/0.8 "DM Mono",
+      monospace;
+  }
+  .post-meta {
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font:
+      400 8px/1.4 "DM Mono",
+      monospace;
+    text-transform: uppercase;
+  }
+  .post-meta span:last-child {
+    text-align: right;
+  }
+  .post-card h2 {
+    margin: 17px 0 13px;
+    overflow-wrap: anywhere;
+    font-size: clamp(28px, 2.6vw, 44px);
+    font-weight: 500;
+    line-height: 0.96;
+    letter-spacing: -0.06em;
+  }
+  .post-card p {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+  .read-link {
+    display: inline-block;
+    margin-top: 22px;
+    font:
+      400 9px/1 "DM Mono",
+      monospace;
+    text-transform: uppercase;
+  }
+  .pagination {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 28px var(--gutter);
+    border-top: 1px solid var(--line);
+  }
+  .pagination > a {
+    color: inherit;
+    font:
+      400 9px/1 "DM Mono",
+      monospace;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .pagination > a:last-child {
+    justify-self: end;
+  }
+  .pagination .disabled {
+    opacity: 0.25;
+    pointer-events: none;
+  }
+  .pagination ol {
+    display: flex;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .pagination ol a {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border: 1px solid transparent;
+    color: var(--muted);
+    font:
+      400 9px/1 "DM Mono",
+      monospace;
+    text-decoration: none;
+  }
+  .pagination ol a.active {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .blog-empty {
+    min-height: 65vh;
+    padding: clamp(90px, 12vw, 180px) clamp(18px, 5vw, 90px);
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .blog-empty h2 {
+    margin: clamp(70px, 10vw, 150px) 0 45px;
+    font-size: clamp(58px, 9vw, 140px);
+    font-weight: 500;
+    line-height: 0.84;
+    letter-spacing: -0.08em;
+  }
+  .blog-empty > p:last-child {
+    max-width: 520px;
+    margin-left: auto;
+    font-size: clamp(16px, 1.4vw, 22px);
+    line-height: 1.55;
+  }
+  @media (max-width: 1000px) {
+    .post-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 760px) {
+    .blog-intro {
+      display: block;
+      min-height: auto;
+      padding-top: 70px;
+    }
+    .blog-intro h1 {
+      margin: 65px 0;
+      font-size: clamp(55px, 17vw, 75px);
+    }
+    .blog-intro > p {
+      width: 80%;
+      margin-left: auto;
+    }
+    .post-grid {
+      grid-template-columns: 1fr;
+      gap: 75px;
+    }
+    .post-cover {
+      aspect-ratio: 5/4;
+    }
+    .pagination {
+      grid-template-columns: 1fr 1fr;
+      row-gap: 24px;
+    }
+    .pagination ol {
+      grid-column: 1/-1;
+      grid-row: 1;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
   }
 </style>

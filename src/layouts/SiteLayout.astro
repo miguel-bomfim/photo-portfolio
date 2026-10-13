@@ -170,15 +170,15 @@ const { title, description, active = "home" } = Astro.props;
   .site-header--overlay:not(.is-scrolled) .nav a,
   .site-header--overlay:not(.is-scrolled) .nav button,
   .site-header--overlay:not(.is-scrolled) .nav .is-active {
-    color: #171714;
+    color: var(--ink);
   }
 
   .site-header--overlay:not(.is-scrolled) .nav .contact-link {
-    border-color: #171714;
+    border-color: var(--ink);
   }
 
   .site-header--overlay:not(.is-scrolled) .theme-toggle {
-    border-color: rgba(23, 23, 20, .28) !important;
+    border-color: color-mix(in srgb, var(--ink) 28%, transparent) !important;
   }
 
   .brand {
@@ -271,6 +271,12 @@ const { title, description, active = "home" } = Astro.props;
 
   .nav .contact-link:hover,
   .nav .contact-link.is-active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .site-header--overlay:not(.is-scrolled) .nav .contact-link:hover,
+  .site-header--overlay:not(.is-scrolled) .nav .contact-link.is-active {
     background: var(--ink);
     color: var(--paper);
   }

@@ -5,7 +5,6 @@
   min-height: 100svh;
   align-items: end;
   overflow: hidden;
-  border-bottom: 1px solid var(--line);
   color: #171714;
 }
 
@@ -14,7 +13,7 @@
   z-index: 1;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(247, 246, 241, .96) 0%, rgba(247, 246, 241, .82) 32%, rgba(247, 246, 241, .3) 68%, rgba(247, 246, 241, .04) 100%),
+    linear-gradient(90deg, rgb(247, 246, 241) 0%, rgba(247, 246, 241, .82) 32%, rgba(247, 246, 241, 0.514) 68%, rgba(247, 246, 241, .04) 100%),
     linear-gradient(0deg, rgba(247, 246, 241, .5) 0%, rgba(247, 246, 241, 0) 44%);
   content: "";
   pointer-events: none;
@@ -34,7 +33,7 @@
 .hero h1 {
   max-width: 980px;
   margin: 0 0 38px;
-  font-size: clamp(66px, 9vw, 145px);
+  font-size: clamp(66px, 6vw, 145px);
   font-weight: 500;
   line-height: .84;
   letter-spacing: -.08em;
@@ -140,7 +139,7 @@
 .paths,
 .services,
 .journal {
-  padding: clamp(90px, 11vw, 170px) clamp(18px, 3.5vw, 64px);
+  padding: clamp(60px, 5vw, 170px) clamp(18px, 3.5vw, 64px);
 }
 
 .section-heading {
@@ -327,6 +326,7 @@
   grid-template-columns: .34fr 1fr;
   gap: 30px;
   border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--line);
 }
 
 .client-list {
@@ -501,4 +501,34 @@
   .service-list h3 { margin-top: 65px; }
 
   .journal-grid { grid-template-columns: 1fr; gap: 55px; }
+}
+
+:root[data-theme="dark"] .hero {
+  color: #f1f0e9;
+}
+
+:root[data-theme="dark"] .hero-visual::after {
+  background:
+    linear-gradient(180deg, rgba(14, 14, 13, .62) 0%, rgba(14, 14, 13, .28) 8%, rgba(14, 14, 13, 0) 22%),
+    linear-gradient(90deg, rgba(14, 14, 13, .96) 0%, rgba(14, 14, 13, .82) 32%, rgba(14, 14, 13, .3) 68%, rgba(14, 14, 13, .05) 100%),
+    linear-gradient(0deg, rgba(14, 14, 13, .58) 0%, rgba(14, 14, 13, 0) 44%);
+}
+
+:root[data-theme="dark"] .hero .button {
+  border-color: #f1f0e9;
+  color: #f1f0e9;
+}
+
+:root[data-theme="dark"] .hero .button--primary {
+  background: #f1f0e9;
+  color: #141412;
+}
+
+@media (max-width: 760px) {
+  :root[data-theme="dark"] .hero-visual::after {
+    background:
+      linear-gradient(180deg, rgba(14, 14, 13, .68) 0%, rgba(14, 14, 13, .3) 10%, rgba(14, 14, 13, 0) 24%),
+      linear-gradient(0deg, rgba(14, 14, 13, .96) 0%, rgba(14, 14, 13, .84) 42%, rgba(14, 14, 13, .16) 78%, rgba(14, 14, 13, 0) 100%),
+      linear-gradient(90deg, rgba(14, 14, 13, .34) 0%, rgba(14, 14, 13, 0) 70%);
+  }
 }
