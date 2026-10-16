@@ -130,13 +130,19 @@ const year = new Date().getFullYear();
     }
 
     .footer-meta {
-      min-height: 125px;
+      min-height: 0;
       margin-top: 90px;
       text-align: left;
     }
 
     .footer-links a {
       width: min(100%, 340px);
+    }
+
+    .footer-meta > span {
+      display: block;
+      margin-top: 38px;
+      text-align: center;
     }
   }
 </style>

@@ -77,29 +77,6 @@ const aboutText =
       <div class="path-grid">
         <a
           class="path-card"
-          href="/trabalhos?filtro=publicidade"
-          data-cursor-photo
-        >
-          {
-            publicityAsset && (
-              <CmsImage
-                asset={publicityAsset}
-                alt="Projeto de publicidade de Sarah Heloísa"
-                maxWidth={1100}
-                sizes="(max-width: 760px) 100vw, 50vw"
-              />
-            )
-          }
-          <span class="path-shade" aria-hidden="true"></span>
-          <span class="path-index">Para marcas</span>
-          <span class="path-copy"
-            ><strong>Publicidade</strong><span
-              >Estratégia, planejamento e conteúdo ↗</span
-            ></span
-          >
-        </a>
-        <a
-          class="path-card"
           href="/trabalhos?filtro=fotografia"
           data-cursor-photo
         >
@@ -121,10 +98,46 @@ const aboutText =
             ></span
           >
         </a>
+        <a
+          class="path-card"
+          href="/trabalhos?filtro=publicidade"
+          data-cursor-photo
+        >
+          {
+            publicityAsset && (
+              <CmsImage
+                asset={publicityAsset}
+                alt="Projeto de publicidade de Sarah Heloísa"
+                maxWidth={1100}
+                sizes="(max-width: 760px) 100vw, 50vw"
+              />
+            )
+          }
+          <span class="path-shade" aria-hidden="true"></span>
+          <span class="path-index">Para marcas</span>
+          <span class="path-copy"
+            ><strong>Publicidade</strong><span
+              >Estratégia, planejamento e conteúdo ↗</span
+            ></span
+          >
+        </a>
       </div>
       <div class="all-works-action">
         <a class="all-works-cta" href="/trabalhos">
-          <span>Ver todos os trabalhos ↗</span>
+          <span>Ver todos os trabalhos</span>
+          <svg
+            class="home-action-arrow"
+            viewBox="0 0 20 20"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M5 15 15 5M7 5h8v8"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
         </a>
       </div>
     </section>
@@ -197,7 +210,22 @@ const aboutText =
           Olhar atento,<br /><em>ideias com direção.</em>
         </h2>
         <p>{aboutText}</p>
-        <a href="/sobre">Sobre mim ↗</a>
+        <a href="/sobre">
+          <span>Sobre mim</span>
+          <svg
+            class="home-action-arrow"
+            viewBox="0 0 20 20"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M5 15 15 5M7 5h8v8"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </a>
       </div>
     </section>
 
@@ -234,7 +262,23 @@ const aboutText =
             ))}
           </div>
           <div class="journal-action">
-            <a href="/blog">Ver todos os posts ↗</a>
+            <a href="/blog">
+              <span>Ver todos os posts</span>
+              <svg
+                class="home-action-arrow"
+                viewBox="0 0 20 20"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M5 15 15 5M7 5h8v8"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
           </div>
         </section>
       )
