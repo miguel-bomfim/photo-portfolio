@@ -66,25 +66,49 @@ const { title, description, active = "home" } = Astro.props;
           >Sobre</a
         >
         <a class:list={{ "primary-nav-link": true, "is-active": active === "blog" }} href="/blog">Blog</a>
-        <a
-          class="contact-link"
-          href="#contato">Falar comigo</a
-        >
-        <details class="mobile-menu">
-          <summary aria-label="Abrir menu">Menu</summary>
-          <div>
-            <a class:list={{ "is-active": active === "works" }} href="/trabalhos">Trabalhos</a>
-            <a class:list={{ "is-active": active === "about" }} href="/sobre">Sobre</a>
-            <a class:list={{ "is-active": active === "blog" }} href="/blog">Blog</a>
-          </div>
-        </details>
-        <button class="theme-toggle" type="button" aria-label="Alternar tema">
+        <button class="theme-toggle theme-toggle--desktop" type="button" aria-label="Alternar tema">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
               d="M20 15.2A8.4 8.4 0 0 1 8.8 4 8.5 8.5 0 1 0 20 15.2Z"
               fill="currentColor"></path>
           </svg>
         </button>
+        <div class="mobile-menu">
+          <button
+            class="mobile-menu-toggle"
+            type="button"
+            aria-label="Abrir menu"
+            aria-controls="mobile-menu-panel"
+            aria-expanded="false"
+          >
+            <span></span><span></span><span></span>
+          </button>
+          <button class="mobile-menu-backdrop" type="button" tabindex="-1" aria-label="Fechar menu"></button>
+          <aside id="mobile-menu-panel" class="mobile-menu-panel" aria-label="Menu principal" aria-hidden="true" inert>
+            <div class="mobile-menu-head">
+              <span>Navegação</span>
+              <button class="mobile-menu-close" type="button" aria-label="Fechar menu">
+                <span></span><span></span>
+              </button>
+            </div>
+            <div class="mobile-menu-links">
+              <a class:list={{ "is-active": active === "home" }} href="/">Início</a>
+              <a class:list={{ "is-active": active === "works" }} href="/trabalhos">Trabalhos</a>
+              <a class:list={{ "is-active": active === "about" }} href="/sobre">Sobre</a>
+              <a class:list={{ "is-active": active === "blog" }} href="/blog">Blog</a>
+            </div>
+            <div class="mobile-menu-theme">
+              <span>Alternar tema</span>
+              <button class="theme-toggle theme-toggle--mobile" type="button" aria-label="Alternar tema">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M20 15.2A8.4 8.4 0 0 1 8.8 4 8.5 8.5 0 1 0 20 15.2Z"
+                    fill="currentColor"></path>
+                </svg>
+              </button>
+            </div>
+          </aside>
+        </div>
       </nav>
     </header>
 
@@ -102,12 +126,38 @@ const { title, description, active = "home" } = Astro.props;
       };
       setThemeColor();
 
-      document.querySelector(".theme-toggle")?.addEventListener("click", () => {
-        const next =
-          document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-        document.documentElement.dataset.theme = next;
-        localStorage.setItem("sarah-theme", next);
-        setThemeColor();
+      document.querySelectorAll(".theme-toggle").forEach((toggle) => {
+        toggle.addEventListener("click", () => {
+          const next =
+            document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+          document.documentElement.dataset.theme = next;
+          localStorage.setItem("sarah-theme", next);
+          setThemeColor();
+        });
+      });
+
+      const menu = document.querySelector(".mobile-menu");
+      const menuToggle = document.querySelector(".mobile-menu-toggle");
+      const menuPanel = document.querySelector(".mobile-menu-panel");
+      const menuClose = document.querySelector(".mobile-menu-close");
+      const menuBackdrop = document.querySelector(".mobile-menu-backdrop");
+      const setMenuOpen = (open) => {
+        menu?.classList.toggle("is-open", open);
+        menuToggle?.setAttribute("aria-expanded", String(open));
+        menuPanel?.setAttribute("aria-hidden", String(!open));
+        menuPanel?.toggleAttribute("inert", !open);
+        document.body.classList.toggle("menu-open", open);
+        if (open) menuClose?.focus();
+        else menuToggle?.focus();
+      };
+      menuToggle?.addEventListener("click", () => setMenuOpen(true));
+      menuClose?.addEventListener("click", () => setMenuOpen(false));
+      menuBackdrop?.addEventListener("click", () => setMenuOpen(false));
+      menuPanel?.querySelectorAll("a").forEach((link) =>
+        link.addEventListener("click", () => setMenuOpen(false))
+      );
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && menu?.classList.contains("is-open")) setMenuOpen(false);
       });
 
       const overlayHeader = document.querySelector(".site-header--overlay");
@@ -170,10 +220,6 @@ const { title, description, active = "home" } = Astro.props;
   .site-header--overlay:not(.is-scrolled) .nav button,
   .site-header--overlay:not(.is-scrolled) .nav .is-active {
     color: var(--ink);
-  }
-
-  .site-header--overlay:not(.is-scrolled) .nav .contact-link {
-    border-color: var(--ink);
   }
 
   .site-header--overlay:not(.is-scrolled) .theme-toggle {
@@ -256,30 +302,6 @@ const { title, description, active = "home" } = Astro.props;
     color: var(--ink);
   }
 
-  .nav .contact-link {
-    padding: 11px 15px;
-    border: 1px solid var(--ink);
-    border-radius: 999px;
-    color: var(--ink);
-    transition: background 200ms ease, color 200ms ease;
-  }
-
-  .nav .contact-link::after {
-    display: none;
-  }
-
-  .nav .contact-link:hover,
-  .nav .contact-link.is-active {
-    background: var(--ink);
-    color: var(--paper);
-  }
-
-  .site-header--overlay:not(.is-scrolled) .nav .contact-link:hover,
-  .site-header--overlay:not(.is-scrolled) .nav .contact-link.is-active {
-    background: var(--ink);
-    color: var(--paper);
-  }
-
   .theme-toggle {
     display: grid;
     width: 32px;
@@ -290,6 +312,12 @@ const { title, description, active = "home" } = Astro.props;
   }
 
   .mobile-menu {
+    display: none;
+  }
+
+  .mobile-menu-toggle::after,
+  .mobile-menu-backdrop::after,
+  .mobile-menu-close::after {
     display: none;
   }
 
@@ -314,16 +342,10 @@ const { title, description, active = "home" } = Astro.props;
       display: none;
     }
 
-    .nav {
-      gap: 6px;
-    }
+    .nav { gap: 0; }
 
     .nav .primary-nav-link {
       display: none;
-    }
-
-    .nav .contact-link {
-      padding: 9px 11px;
     }
 
     .mobile-menu {
@@ -331,34 +353,161 @@ const { title, description, active = "home" } = Astro.props;
       display: block;
     }
 
-    .mobile-menu summary {
-      padding: 9px 2px;
-      color: var(--muted);
-      cursor: pointer;
-      font: 500 10px/1 "DM Mono", monospace;
-      list-style: none;
-      text-transform: uppercase;
-    }
+    .theme-toggle--desktop { display: none; }
 
-    .mobile-menu summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .mobile-menu > div {
-      position: absolute;
-      z-index: 3;
-      top: calc(100% + 14px);
-      right: 0;
+    .mobile-menu-toggle {
       display: grid;
-      min-width: 160px;
-      padding: 10px;
-      border: 1px solid var(--line);
-      background: var(--paper);
-      box-shadow: 0 18px 44px rgba(0, 0, 0, .12);
+      width: 44px;
+      height: 44px;
+      padding: 12px !important;
+      place-content: center;
+      gap: 5px;
+      border: 1px solid color-mix(in srgb, var(--ink) 28%, transparent) !important;
+      border-radius: 50%;
+      color: var(--ink) !important;
     }
 
-    .mobile-menu > div a {
-      padding: 13px 10px;
+    .mobile-menu-toggle span {
+      display: block;
+      width: 18px;
+      height: 1px;
+      background: currentColor;
+      transition: transform 250ms ease, opacity 200ms ease;
+    }
+
+    .mobile-menu-backdrop {
+      position: fixed !important;
+      z-index: 29;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      padding: 0 !important;
+      background: rgba(10, 10, 9, .48) !important;
+      opacity: 0;
+      pointer-events: none;
+      backdrop-filter: blur(3px);
+      transition: opacity 320ms ease;
+    }
+
+    .mobile-menu-panel {
+      position: fixed;
+      z-index: 30;
+      top: 0;
+      right: 0;
+      display:flex;
+      width:min(86vw, 390px);
+      height:100dvh;
+      padding:20px 20px 26px;
+      border-left:1px solid var(--line);
+      background:var(--paper);
+      color:var(--ink);
+      flex-direction:column;
+      box-shadow:-24px 0 70px rgba(0,0,0,.18);
+      visibility:hidden;
+      transform:translateX(102%);
+      transition:transform 420ms cubic-bezier(.22,.78,.25,1), visibility 0s linear 420ms;
+    }
+
+    .mobile-menu.is-open .mobile-menu-backdrop {
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .mobile-menu.is-open .mobile-menu-panel {
+      visibility:visible;
+      transform:translateX(0);
+      transition-delay:0s;
+    }
+
+    .mobile-menu-head {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding-bottom:20px;
+      border-bottom:1px solid var(--line);
+      color:var(--muted);
+      font:500 10px/1 "DM Mono",monospace;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .mobile-menu-close {
+      position:relative !important;
+      width:44px;
+      height:44px;
+      padding:0 !important;
+      border:1px solid var(--line) !important;
+      border-radius:50%;
+      color:var(--ink) !important;
+    }
+
+    .mobile-menu-close span {
+      position:absolute;
+      top:50%;
+      left:50%;
+      width:17px;
+      height:1px;
+      background:currentColor;
+    }
+
+    .mobile-menu-close span:first-child { transform:translate(-50%,-50%) rotate(45deg); }
+    .mobile-menu-close span:last-child { transform:translate(-50%,-50%) rotate(-45deg); }
+
+    .mobile-menu-links {
+      display:flex;
+      padding:clamp(46px,10vh,88px) 0 30px;
+      flex-direction:column;
+    }
+
+    .mobile-menu-links a {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:18px 2px;
+      border-bottom:1px solid var(--line);
+      color:var(--ink) !important;
+      font:500 clamp(30px,10vw,48px)/1 "Manrope",sans-serif;
+      letter-spacing:-.065em;
+      text-transform:none;
+    }
+
+    .mobile-menu-links a::before {
+      order:2;
+      color:var(--muted);
+      content:"↗";
+      font:400 16px/1 "DM Mono",monospace;
+      letter-spacing:0;
+    }
+
+    .mobile-menu-links a::after { display:none; }
+    .mobile-menu-links a.is-active { color:var(--accent) !important; }
+
+    .mobile-menu-theme {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-top:auto;
+      padding-top:20px;
+      border-top:1px solid var(--line);
+      color:var(--muted);
+      font:500 10px/1 "DM Mono",monospace;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+
+    .theme-toggle--mobile {
+      width:44px;
+      height:44px;
+      color:var(--ink) !important;
+    }
+
+    :global(body.menu-open) {
+      overflow:hidden;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .mobile-menu-panel,
+      .mobile-menu-backdrop { transition-duration:0s; }
     }
   }
 </style>

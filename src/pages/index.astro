@@ -12,13 +12,6 @@ const recentPosts = content.blogs.slice(0, 3);
 const featuredCase = content.professionalProjects.find(
   (project) => project.featured,
 );
-const clientNames = [
-  ...new Set(
-    content.professionalProjects
-      .map((project) => project.client?.trim())
-      .filter(Boolean),
-  ),
-] as string[];
 
 const heroAsset =
   home?.homeBackground ||
@@ -76,9 +69,9 @@ const aboutText =
 
     <section class="paths" aria-labelledby="paths-title">
       <header class="section-heading section-heading--compact">
-        <p class="eyebrow">Por onde começar</p>
+        <p class="eyebrow"></p>
         <h2 id="paths-title">
-          Duas formas de dar<br /><em>presença a uma ideia.</em>
+          Duas formas de<br /><em>contar uma história.</em>
         </h2>
       </header>
       <div class="path-grid">
@@ -131,7 +124,7 @@ const aboutText =
       </div>
       <div class="all-works-action">
         <a class="all-works-cta" href="/trabalhos">
-          <span>Ver todos os trabalhos</span><span aria-hidden="true">↗</span>
+          <span>Ver todos os trabalhos ↗</span>
         </a>
       </div>
     </section>
@@ -186,21 +179,6 @@ const aboutText =
       )
     }
 
-    {
-      clientNames.length > 0 && (
-        <section class="clients" aria-labelledby="clients-title">
-          <p class="eyebrow" id="clients-title">
-            Clientes e projetos
-          </p>
-          <div class="client-list">
-            {clientNames.map((client) => (
-              <span>{client}</span>
-            ))}
-          </div>
-        </section>
-      )
-    }
-
     <section class="about-preview" aria-labelledby="about-preview-title">
       {
         about?.photo && (
@@ -219,7 +197,7 @@ const aboutText =
           Olhar atento,<br /><em>ideias com direção.</em>
         </h2>
         <p>{aboutText}</p>
-        <a href="/sobre">Conhecer a Sarah ↗</a>
+        <a href="/sobre">Sobre mim ↗</a>
       </div>
     </section>
 
@@ -227,12 +205,14 @@ const aboutText =
       recentPosts.length > 0 && (
         <section class="journal" aria-labelledby="journal-title">
           <header class="section-heading">
-            <p class="eyebrow">Blog</p>
+            <p class="eyebrow" />
             <h2 id="journal-title">
-              Ideias, referências
-              <br />e <em>processos.</em>
+              Escritos de
+              <>
+                quem
+                <em>cria</em>
+              </>
             </h2>
-            <a href="/blog">Ver todos os posts ↗</a>
           </header>
           <div class="journal-grid">
             {recentPosts.map((post) => (
@@ -252,6 +232,9 @@ const aboutText =
                 <p>{post.excerpt}</p>
               </a>
             ))}
+          </div>
+          <div class="journal-action">
+            <a href="/blog">Ver todos os posts ↗</a>
           </div>
         </section>
       )
